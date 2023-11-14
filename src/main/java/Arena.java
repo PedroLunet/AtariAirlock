@@ -9,12 +9,14 @@ import java.util.List;
 public class Arena {
     private int width;
     private int height;
-    private List<Position> walls;
+    private List<Position> vwalls;
+    private List<Position> hwalls;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        this.walls = new ArrayList<>();
+        this.vwalls = new ArrayList<>();
+        this.hwalls = new ArrayList<>();
         initializeWalls();
     }
 
@@ -26,25 +28,21 @@ public class Arena {
         int floorSeparation = 2;
 
         for (int x = sideDistance; x < width - sideDistance; x++) {
-            walls.add(new Position(x, height - bottomDistance - 2));
+            vwalls.add(new Position(x, height - bottomDistance - 2));
         }
 
         for (int y = topDistance + 1; y < height - bottomDistance - 2; y++) {
-            walls.add(new Position(sideDistance, y));
-            walls.add(new Position(sideDistance + elevatorWidth - 1, y));
-            walls.add(new Position(width - sideDistance - 1, y));
-            walls.add(new Position(width - sideDistance - elevatorWidth, y));
+            vwalls.add(new Position(sideDistance, y));
+            vwalls.add(new Position(sideDistance + elevatorWidth - 1, y));
+            vwalls.add(new Position(width - sideDistance - 1, y));
+            vwalls.add(new Position(width - sideDistance - elevatorWidth, y));
             if ((y - topDistance - 1) % (floorSeparation + 1) == 0) {
                 for (int x = sideDistance + elevatorWidth; x < width - sideDistance - elevatorWidth; x++) {
-                    walls.add(new Position(x, y));
+                    hwalls.add(new Position(x, y));
                 }
             }
         }
     }
-
-
-
-
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
@@ -52,8 +50,11 @@ public class Arena {
 
         graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
 
-        for (Position wall : walls) {
+        for (Position wall : vwalls) {
             graphics.setCharacter(wall.getX(), wall.getY(), '\u2588');
+        }
+        for (Position wall : hwalls) {
+            graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
         }
     }
 }
