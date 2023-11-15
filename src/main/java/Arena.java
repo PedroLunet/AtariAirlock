@@ -27,10 +27,14 @@ public class Arena {
     public void processKey(KeyStroke key) {
         System.out.println(key);
         if (key.getKeyType() == KeyType.ArrowLeft) {
-            hero.moveLeft();
+            moveHero(hero.moveLeft());
         } else if (key.getKeyType() == KeyType.ArrowRight) {
-            hero.moveRight();
+            moveHero(hero.moveRight());
         }
+    }
+
+    public void moveHero(Position position) {
+            hero.setPosition(position);
     }
 
     private void initializeWalls() {
