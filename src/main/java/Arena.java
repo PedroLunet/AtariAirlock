@@ -2,6 +2,8 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +11,26 @@ import java.util.List;
 public class Arena {
     private int width;
     private int height;
+    private Hero hero;
     private List<Position> vwalls;
     private List<Position> hwalls;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
+        hero = new Hero(50, 23);
         this.vwalls = new ArrayList<>();
         this.hwalls = new ArrayList<>();
         initializeWalls();
+    }
+
+    public void processKey(KeyStroke key) {
+        System.out.println(key);
+        if (key.getKeyType() == KeyType.ArrowLeft) {
+            hero.moveLeft();
+        } else if (key.getKeyType() == KeyType.ArrowRight) {
+            hero.moveRight();
+        }
     }
 
     private void initializeWalls() {
@@ -56,5 +69,6 @@ public class Arena {
         for (Position wall : hwalls) {
             graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
         }
+        hero.draw(graphics);
     }
 }

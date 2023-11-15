@@ -45,6 +45,6 @@ public class Game {
         }
     }
     private void processKey(KeyStroke key) {
-        System.out.println(key);
+        arena.processKey(key);
     }
 }
