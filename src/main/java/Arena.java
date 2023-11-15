@@ -6,7 +6,9 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
     private int width;
@@ -14,11 +16,14 @@ public class Arena {
     private Hero hero;
     private List<Position> vwalls;
     private List<Position> hwalls;
+    private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 4);
+    private List<Monster> monsters = createMonsters();
+    private final int nmonsters = monstersplevel.size()-1;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        hero = new Hero(50, 23);
+        hero = new Hero(25, 23);
         this.vwalls = new ArrayList<>();
         this.hwalls = new ArrayList<>();
         initializeWalls();
@@ -34,7 +39,8 @@ public class Arena {
     }
 
     public void moveHero(Position position) {
-            hero.setPosition(position);
+        hero.setPosition(position);
+        System.out.println(hero.getPosition());
     }
 
     private void initializeWalls() {
@@ -73,6 +79,23 @@ public class Arena {
         for (Position wall : hwalls) {
             graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
         }
+        for (Monster monster : monsters){ monster.draw(graphics);}
         hero.draw(graphics);
     }
+
+   public List<Monster> createMonsters(){
+        int min = 23 ; // Parede da esquerda
+        int max = 76 ; // Parede da direita
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        monsters.add(new Monster (65,23));
+        for(int j=1 ; j<monstersplevel.size() ; j++){
+            for(int i = 0; i< monstersplevel.get(j) ; i++) {
+                int ri = random.nextInt(max - min + 1) + min;
+                monsters.add(new Monster(ri, 23 - 3 * j));
+            }
+        }
+        return monsters;
+    }
+
 }
