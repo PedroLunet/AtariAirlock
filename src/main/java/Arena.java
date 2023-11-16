@@ -16,9 +16,9 @@ public class Arena {
     private Hero hero;
     private List<Position> vwalls;
     private List<Position> hwalls;
-    private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 4);
+    private List<Position> allWalls = new ArrayList<>();;
+    private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
     private List<Monster> monsters = createMonsters();
-    private final int nmonsters = monstersplevel.size()-1;
 
     public Arena(int width, int height) {
         this.width = width;
@@ -36,11 +36,12 @@ public class Arena {
         } else if (key.getKeyType() == KeyType.ArrowRight) {
             moveHero(hero.moveRight());
         }
+        //hero jump on arrowup
     }
 
-    public void moveHero(Position position) {
+    public void moveHero(Position position) { //move to hero class?
         hero.setPosition(position);
-        System.out.println(hero.getPosition());
+        System.out.println(hero.getPosition()); //not needed
     }
 
     private void initializeWalls() {
@@ -66,6 +67,15 @@ public class Arena {
             }
         }
     }
+    public boolean checkWalls(Position p){
+        if(allWalls.isEmpty()){ allWalls.addAll(vwalls); allWalls.addAll(hwalls);}
+        for (Position wall : allWalls) {
+            if(p.samePosition(wall,p)){
+                return true;
+            }
+        }
+        return false; // No collision
+    }
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
@@ -83,19 +93,24 @@ public class Arena {
         hero.draw(graphics);
     }
 
-   public List<Monster> createMonsters(){
-        int min = 23 ; // Parede da esquerda
-        int max = 76 ; // Parede da direita
-        Random random = new Random();
-        ArrayList<Monster> monsters = new ArrayList<>();
-        monsters.add(new Monster (65,23));
-        for(int j=1 ; j<monstersplevel.size() ; j++){
-            for(int i = 0; i< monstersplevel.get(j) ; i++) {
-                int ri = random.nextInt(max - min + 1) + min;
-                monsters.add(new Monster(ri, 23 - 3 * j));
-            }
+   public List<Monster> createMonsters() {
+       int min = 23; // Parede da esquerda
+       int max = 76; // Parede da direita
+       Random random = new Random();
+       ArrayList<Monster> monsters = new ArrayList<>();
+       monsters.add(new Monster(65, 23));
+       for (int j = 1; j < monstersplevel.size(); j++) {
+           for (int i = 0; i < monstersplevel.get(j); i++) {
+               int ri = random.nextInt(max - min + 1) + min;
+               monsters.add(new Monster(ri, 23 - 3 * j));
+           }
+       }
+       return monsters;
+   }
+   public void moveMonsters(){
+        for(Monster monster : monsters){
+            monster.move(this);
         }
-        return monsters;
-    }
-
+   }
 }
+
