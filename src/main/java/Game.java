@@ -27,10 +27,15 @@ public class Game {
         screen.refresh();
     }
     public void run() throws IOException, InterruptedException {
+        boolean gameStarted=false;
+        long startingTime = 0;
         while (true) {
             draw();
             KeyStroke key = screen.pollInput(); //Em vez de esperar por input o while corre sempre poll != read
             if (key != null) {
+                if(!gameStarted) startingTime = System.currentTimeMillis();
+                System.out.println(startingTime);
+                gameStarted=true;
                 if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
                     screen.close();
                     System.out.println("Quit.");
@@ -42,10 +47,13 @@ public class Game {
                 }
                 processKey(key);
             }
-            arena.moveMonsters();
-            //
             Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps //
-            // coloca o while mais lento
+                                    // coloca o while mais lento
+            if(gameStarted) {
+                System.out.println(System.currentTimeMillis()-startingTime);
+                arena.moveHero();
+                arena.moveMonsters();
+            }
         }
 
     }

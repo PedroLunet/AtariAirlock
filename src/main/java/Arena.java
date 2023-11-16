@@ -13,7 +13,7 @@ import java.util.Random;
 public class Arena {
     private int width;
     private int height;
-    private Hero hero;
+    public Hero hero;
     private List<Position> vwalls;
     private List<Position> hwalls;
     private List<Position> allWalls = new ArrayList<>();;
@@ -32,16 +32,16 @@ public class Arena {
     public void processKey(KeyStroke key) {
         System.out.println(key);
         if (key.getKeyType() == KeyType.ArrowLeft) {
-            moveHero(hero.moveLeft());
+            hero.moveLeft();
         } else if (key.getKeyType() == KeyType.ArrowRight) {
-            moveHero(hero.moveRight());
+            hero.moveRight();
+        }else if (key.getKeyType() == KeyType.ArrowUp) {
+            hero.startJump();
         }
-        //hero jump on arrowup
     }
 
-    public void moveHero(Position position) { //move to hero class?
-        hero.setPosition(position);
-        System.out.println(hero.getPosition()); //not needed
+    public void moveHero() { //move to hero class? // apenas atualiza a posicao do hero
+        hero.move(this);
     }
 
     private void initializeWalls() {
