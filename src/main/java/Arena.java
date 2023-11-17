@@ -32,13 +32,14 @@ public class Arena {
     public void processKey(KeyStroke key) {
         System.out.println(key);
         if (key.getKeyType() == KeyType.ArrowLeft) {
-            hero.moveLeft();
+            hero.moveLeft(this);
         } else if (key.getKeyType() == KeyType.ArrowRight) {
-            hero.moveRight();
-        }else if (key.getKeyType() == KeyType.ArrowUp) {
+            hero.moveRight(this);
+        } else if (key.getKeyType() == KeyType.ArrowUp) {
             hero.startJump();
         }
     }
+
 
     public void moveHero() { //move to hero class? // apenas atualiza a posicao do hero
         hero.move(this);

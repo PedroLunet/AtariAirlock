@@ -10,14 +10,24 @@ public class Hero extends Element {
 
     private int isJumping = 0;
     private long jumpStart;
-    public void moveRight() {
+    public void moveRight(Arena arena) {
+        int newX = position.getX() + 1;
+        Position newPosition = new Position(newX, position.getY());
 
-        setPosition(new Position(position.getX() + 1, position.getY()));
+        if (!arena.checkWalls(newPosition)) {
+            setPosition(new Position(newX, position.getY()));
+        }
     }
 
-    public void moveLeft() {
-        setPosition(new Position(position.getX() - 1, position.getY()));
+    public void moveLeft(Arena arena) {
+        int newX = position.getX() - 1;
+        Position newPosition = new Position(newX, position.getY());
+
+        if (!arena.checkWalls(newPosition)) {
+            setPosition(new Position(newX, position.getY()));
+        }
     }
+
 
     public void draw(TextGraphics graphics) {
         graphics.setForegroundColor(TextColor.Factory.fromString("#CD2C0C"));
