@@ -14,9 +14,8 @@ public class Arena {
     private int width;
     private int height;
     public Hero hero;
-    private List<Position> vwalls;
-    private List<Position> hwalls;
-    private List<Position> allWalls = new ArrayList<>();;
+    private List<Wall> walls;
+    private List<Floor> floors;
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
     private List<Monster> monsters = createMonsters();
 
@@ -24,9 +23,8 @@ public class Arena {
         this.width = width;
         this.height = height;
         hero = new Hero(25, 23);
-        this.vwalls = new ArrayList<>();
-        this.hwalls = new ArrayList<>();
-        initializeWalls();
+        walls = createWalls();
+        floors = createFloors();
     }
 
     public void processKey(KeyStroke key) {
@@ -40,43 +38,31 @@ public class Arena {
         }
     }
 
+    public List<Wall> createWalls(){
+        List<Wall> walls = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            walls.add(new Wall(i, 0));
+            walls.add(new Wall(i, 50));
+        }
+        for (int i = 0; i < 50; i++) {
+            walls.add(new Wall(0, i));
+            walls.add(new Wall(100, i));
+        }
+        return walls;
+    }
+
+    public List<Floor> createFloors(){
+        List<Floor> floors = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            floors.add(new Floor(i, 49));
+        }
+        return floors;
+    }
 
     public void moveHero() { //move to hero class? // apenas atualiza a posicao do hero
         hero.move(this);
     }
 
-    private void initializeWalls() {
-        int topDistance = 8;
-        int bottomDistance = 2;
-        int sideDistance = 15;
-        int elevatorWidth = 8;
-        int floorSeparation = 2;
-
-        for (int x = sideDistance; x < width - sideDistance; x++) {
-            vwalls.add(new Position(x, height - bottomDistance - 2));
-        }
-
-        for (int y = topDistance + 1; y < height - bottomDistance - 2; y++) {
-            vwalls.add(new Position(sideDistance, y));
-            vwalls.add(new Position(sideDistance + elevatorWidth - 1, y));
-            vwalls.add(new Position(width - sideDistance - 1, y));
-            vwalls.add(new Position(width - sideDistance - elevatorWidth, y));
-            if ((y - topDistance - 1) % (floorSeparation + 1) == 0) {
-                for (int x = sideDistance + elevatorWidth; x < width - sideDistance - elevatorWidth; x++) {
-                    hwalls.add(new Position(x, y));
-                }
-            }
-        }
-    }
-    public boolean checkWalls(Position p){
-        if(allWalls.isEmpty()){ allWalls.addAll(vwalls); allWalls.addAll(hwalls);}
-        for (Position wall : allWalls) {
-            if(p.samePosition(wall,p)){
-                return true;
-            }
-        }
-        return false; // No collision
-    }
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
@@ -84,13 +70,18 @@ public class Arena {
 
         graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
 
-        for (Position wall : vwalls) {
-            graphics.setCharacter(wall.getX(), wall.getY(), '\u2588');
+        for (Wall wall : walls){
+            wall.draw(graphics);
         }
-        for (Position wall : hwalls) {
-            graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
+
+        for (Floor floor : floors){
+            floor.draw(graphics);
         }
-        for (Monster monster : monsters){ monster.draw(graphics);}
+
+        for (Monster monster : monsters){
+            monster.draw(graphics);
+        }
+
         hero.draw(graphics);
     }
 

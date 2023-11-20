@@ -50,7 +50,6 @@ public class Game {
             Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps //
                                     // coloca o while mais lento
             if(gameStarted) {
-                System.out.println(System.currentTimeMillis()-startingTime);
                 arena.moveHero();
                 arena.moveMonsters();
             }

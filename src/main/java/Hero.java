@@ -13,19 +13,13 @@ public class Hero extends Element {
     public void moveRight(Arena arena) {
         int newX = position.getX() + 1;
         Position newPosition = new Position(newX, position.getY());
-
-        if (!arena.checkWalls(newPosition)) {
-            setPosition(new Position(newX, position.getY()));
-        }
+        setPosition(newPosition); // Update the hero's position
     }
 
     public void moveLeft(Arena arena) {
         int newX = position.getX() - 1;
         Position newPosition = new Position(newX, position.getY());
-
-        if (!arena.checkWalls(newPosition)) {
-            setPosition(new Position(newX, position.getY()));
-        }
+        setPosition(newPosition); // Update the hero's position
     }
 
 
