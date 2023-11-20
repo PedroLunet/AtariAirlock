@@ -30,7 +30,6 @@ public class Arena {
     }
 
     public void processKey(KeyStroke key) {
-        System.out.println(key);
         if (key.getKeyType() == KeyType.ArrowLeft) {
             hero.moveLeft(this);
         } else if (key.getKeyType() == KeyType.ArrowRight) {
