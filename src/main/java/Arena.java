@@ -20,6 +20,7 @@ public class Arena {
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
     private List<Monster> monsters = createMonsters();
     private List<Key> keys = createKeys();
+    private boolean lastKeyType ;
 
     public Arena(int width, int height) {
         this.width = width;
@@ -40,13 +41,19 @@ public class Arena {
         }
     }
 
-    public void moveHero() { //move to hero class? // apenas atualiza a posicao do hero
+    public void moveHero() { // apenas atualiza a posicao do hero
         hero.move(this);
         Position heroPosition = hero.getPosition();
         if (checkMonsterCollision(heroPosition)) {
             System.out.println("Game Over!");
             // Se houver colisão, o jogo termina
             System.exit(0); // Esta é uma forma simples de interromper o jogo. Dependendo do ambiente e da estrutura, pode ser necessário usar outro método para interromper o jogo.
+        }
+        if(checkKeyCollision(hero)){
+            //WE CHANGE THIS TO ELEVATOR PROPERTIES
+            //if(lastKeyType) open walls
+            //if(!lastKeyType) activate elevator
+            System.out.println("GOT A KEY"); //TEMPORARY
         }
     }
 
@@ -76,7 +83,7 @@ public class Arena {
     public boolean checkWalls(Position p){
         if(allWalls.isEmpty()){ allWalls.addAll(vwalls); allWalls.addAll(hwalls);}
         for (Position wall : allWalls) {
-            if(p.samePosition(wall,p)){
+            if(p.samePosition(wall)){
                 return true;
             }
         }
@@ -85,11 +92,23 @@ public class Arena {
     public boolean checkMonsterCollision(Position heroPosition) {
         for (Monster monster : monsters) {
             Position monsterPosition = monster.getPosition();
-            if (heroPosition.samePosition(heroPosition, monsterPosition)) {
+            if (heroPosition.samePosition(monsterPosition)) {
                 return true; // Se tiver Colisão
             }
         }
         return false; // Se nao tiver colisão
+    }
+    public boolean checkKeyCollision(Hero hero){
+        Position heroP = hero.getPosition();
+        for(Key key : keys){
+            Position keyP = key.getPosition();
+            if(heroP.samePosition(keyP)){
+                lastKeyType = key.getType();
+                keys.remove(key);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void draw(TextGraphics graphics) {

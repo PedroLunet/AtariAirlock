@@ -26,8 +26,8 @@ public class Position {
     }
 
     //Methods
-    public boolean samePosition(Position p1, Position p2) {
-        return p1.getX() == p2.getX() && p1.getY() == p2.getY();
+    public boolean samePosition(Position p2) {
+        return this.getX() == p2.getX() && this.getY() == p2.getY();
     }
 
     @Override
