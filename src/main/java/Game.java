@@ -11,14 +11,14 @@ import java.io.IOException;
 public class Game {
     private final TerminalScreen screen;
     private Arena arena;
-
+    private static long timeLeft=50;
 
     public Game(int width, int height) throws IOException {
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(width, height)).createTerminal();
         screen = new TerminalScreen(terminal);
-        screen.setCursorPosition(null);   // we don’t need a cursor
-        screen.startScreen();             // screens must be started
-        screen.doResizeIfNecessary();     // resize screen if necessary
+        screen.setCursorPosition(null);
+        screen.startScreen();
+        screen.doResizeIfNecessary();
         TerminalSize terminalSize = new TerminalSize(width, height);
         arena = new Arena(width, height);
     }
@@ -50,22 +50,17 @@ public class Game {
                 }
                 processKey(key);
             }
-            Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps //
-            // coloca o while mais lento
+            Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps // while+lento
             if (gameStarted) {
                 long timePassed = (System.currentTimeMillis() - startingTime) / 1000;
-                long timeLeft = 50 - timePassed;
+                timeLeft = 50 - timePassed;
                 if(timeLeft == 0 ){screen.close();System.out.println("Game Over"); break;}
-                if (timeLeft % 5 == 0 && timeLeft != lastPrinted) {
-                    System.out.println(timeLeft + "seconds left !");
-                    lastPrinted = timeLeft;
-                }
-
                 arena.hero.moveHero(arena);
                 arena.moveMonsters();
             }
         }
     }
+    public static long getTime(){ return timeLeft;}
     private void processKey(KeyStroke key) {
         arena.processKey(key);
     }

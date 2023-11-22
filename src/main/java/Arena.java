@@ -14,6 +14,7 @@ public class Arena {
     private int width;
     private int height;
     public Hero hero;
+    private int score=0; // EACH LEVEL THE HERO REACHES THE SCORE WILL INCREMENT
     private List<Position> vwalls;
     private List<Position> hwalls;
     private List<Position> allWalls = new ArrayList<>();;
@@ -40,7 +41,22 @@ public class Arena {
             hero.startJump();
         }
     }
-    
+    public void draw(TextGraphics graphics) {
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
+        graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
+        graphics.putString(new TerminalPosition(70, 5), "Time Left= " + Game.getTime());
+        graphics.putString(new TerminalPosition(20,5),"SCORE " + score);
+        for (Position wall : vwalls) {
+            graphics.setCharacter(wall.getX(), wall.getY(), '\u2588');
+        }
+        for (Position wall : hwalls) {
+            graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
+        }
+        for (Monster monster : monsters){ monster.draw(graphics);}
+        hero.draw(graphics);
+        for (Key key : keys){ key.draw(graphics);}
+    }
     private void initializeWalls() {
         int topDistance = 8;
         int bottomDistance = 2;
@@ -93,23 +109,6 @@ public class Arena {
             }
         }
         return false;
-    }
-
-    public void draw(TextGraphics graphics) {
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-
-        graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
-
-        for (Position wall : vwalls) {
-            graphics.setCharacter(wall.getX(), wall.getY(), '\u2588');
-        }
-        for (Position wall : hwalls) {
-            graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
-        }
-        for (Monster monster : monsters){ monster.draw(graphics);}
-        hero.draw(graphics);
-        for (Key key : keys){ key.draw(graphics);}
     }
 
    public List<Monster> createMonsters() {
