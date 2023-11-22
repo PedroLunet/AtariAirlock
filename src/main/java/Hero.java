@@ -27,6 +27,21 @@ public class Hero extends Element {
             setPosition(new Position(newX, position.getY()));
         }
     }
+    public void moveHero(Arena arena) { // apenas atualiza a posicao do hero
+        this.jump(arena);
+        Position heroPosition = this.getPosition();
+        if (arena.checkMonsterCollision(heroPosition)) {
+            System.out.println("Game Over!");
+            // Se houver colisão, o jogo termina
+            System.exit(0); // Esta é uma forma simples de interromper o jogo. Dependendo do ambiente e da estrutura, pode ser necessário usar outro método para interromper o jogo.
+        }
+        if(arena.checkKeyCollision(this)){
+            //WE CHANGE THIS TO ELEVATOR PROPERTIES
+            //if(lastKeyType) open walls
+            //if(!lastKeyType) activate elevator
+            System.out.println("GOT A KEY"); //TEMPORARY
+        }
+    }
 
 
     public void draw(TextGraphics graphics) {
@@ -39,12 +54,12 @@ public class Hero extends Element {
         isJumping=1;
         jumpStart = System.currentTimeMillis();
     }
-    public void move(Arena arena) {
+    public void jump(Arena arena) {
         int jumpHeight = 1; //for now
         long currentTime = System.currentTimeMillis();
         long dt = currentTime - jumpStart;
         Position startingP = getPosition();
-        int speed = 5;
+        int speed = 3;
         if (isJumping == 0) return;
         if (isJumping == 1) {
             int newY = startingP.getY() - jumpHeight;

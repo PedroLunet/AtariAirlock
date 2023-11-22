@@ -40,23 +40,7 @@ public class Arena {
             hero.startJump();
         }
     }
-
-    public void moveHero() { // apenas atualiza a posicao do hero
-        hero.move(this);
-        Position heroPosition = hero.getPosition();
-        if (checkMonsterCollision(heroPosition)) {
-            System.out.println("Game Over!");
-            // Se houver colisão, o jogo termina
-            System.exit(0); // Esta é uma forma simples de interromper o jogo. Dependendo do ambiente e da estrutura, pode ser necessário usar outro método para interromper o jogo.
-        }
-        if(checkKeyCollision(hero)){
-            //WE CHANGE THIS TO ELEVATOR PROPERTIES
-            //if(lastKeyType) open walls
-            //if(!lastKeyType) activate elevator
-            System.out.println("GOT A KEY"); //TEMPORARY
-        }
-    }
-
+    
     private void initializeWalls() {
         int topDistance = 8;
         int bottomDistance = 2;

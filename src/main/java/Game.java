@@ -61,7 +61,7 @@ public class Game {
                     lastPrinted = timeLeft;
                 }
 
-                arena.moveHero();
+                arena.hero.moveHero(arena);
                 arena.moveMonsters();
             }
         }
