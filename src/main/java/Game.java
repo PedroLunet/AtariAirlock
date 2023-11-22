@@ -4,7 +4,6 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.sun.source.tree.ClassTree;
 import java.util.*;
 
 import java.io.IOException;

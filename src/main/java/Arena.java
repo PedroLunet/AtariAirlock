@@ -19,6 +19,7 @@ public class Arena {
     private List<Position> allWalls = new ArrayList<>();;
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
     private List<Monster> monsters = createMonsters();
+    private List<Key> keys = createKeys();
 
     public Arena(int width, int height) {
         this.width = width;
@@ -38,7 +39,6 @@ public class Arena {
             hero.startJump();
         }
     }
-
 
     public void moveHero() { //move to hero class? // apenas atualiza a posicao do hero
         hero.move(this);
@@ -91,6 +91,7 @@ public class Arena {
         }
         for (Monster monster : monsters){ monster.draw(graphics);}
         hero.draw(graphics);
+        for (Key key : keys){ key.draw(graphics);}
     }
 
    public List<Monster> createMonsters() {
@@ -111,6 +112,21 @@ public class Arena {
         for(Monster monster : monsters){
             monster.move(this);
         }
+   }
+   public List<Key> createKeys(){
+        //ESTA FUNCAO ESTA FEITA PARA A ARENA ANTIGA , ALTERAR LINHAS 118 119 122 E 126(Y COORDINATE)
+        int min = 23; //Parede esquerda
+        int max = 76; //Parede direita
+        Random random = new Random();
+        ArrayList<Key> keys = new ArrayList<>();
+        for(int j = 0 ; j< 4 ; j++){
+            for(int i = 0 ; i<2 ; i++){
+                int ri = random.nextInt(max - min + 1) + min;
+                boolean type= i==0 ;
+                keys.add(new Key (ri, 23-3*j - 1 , type));
+            }
+        }
+        return keys;
    }
 }
 
