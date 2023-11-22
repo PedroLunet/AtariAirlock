@@ -77,6 +77,15 @@ public class Arena {
         }
         return false; // No collision
     }
+    public boolean checkMonsterCollision(Position heroPosition) {
+        for (Monster monster : monsters) {
+            Position monsterPosition = monster.getPosition();
+            if (heroPosition.samePosition(heroPosition, monsterPosition)) {
+                return true; // Se tiver Colisão
+            }
+        }
+        return false; // Se nao tiver colisão
+    }
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple

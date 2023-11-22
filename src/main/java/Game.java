@@ -27,15 +27,19 @@ public class Game {
         screen.refresh();
     }
     public void run() throws IOException, InterruptedException {
-        boolean gameStarted=false;
+        boolean gameStarted = false;
         long startingTime = 0;
+
         while (true) {
             draw();
-            KeyStroke key = screen.pollInput(); //Em vez de esperar por input o while corre sempre poll != read
+            KeyStroke key = screen.pollInput();
+
             if (key != null) {
-                if(!gameStarted) startingTime = System.currentTimeMillis();
-                System.out.println(startingTime);
-                gameStarted=true;
+                if (!gameStarted) {
+                    startingTime = System.currentTimeMillis();
+                }
+                gameStarted = true;
+
                 if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
                     screen.close();
                     System.out.println("Quit.");
@@ -47,16 +51,22 @@ public class Game {
                 }
                 processKey(key);
             }
-            Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps //
-                                    // coloca o while mais lento
-            if(gameStarted) {
-                System.out.println(System.currentTimeMillis()-startingTime);
+
+            Thread.sleep(16);
+
+            if (gameStarted) {
                 arena.moveHero();
                 arena.moveMonsters();
+
+                Position heroPosition = arena.hero.getPosition();
+                if (arena.checkMonsterCollision(heroPosition)) {
+                    System.out.println("Game Over!");
+                    gameStarted = false; // Aqui, ao detectar a colisão, o jogo é interrompido.
+                }
             }
         }
-
     }
+
     private void processKey(KeyStroke key) {
         arena.processKey(key);
     }
