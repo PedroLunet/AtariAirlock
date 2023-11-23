@@ -28,7 +28,7 @@ public class Hero extends Element {
         }
     }
     public void moveHero(Arena arena) { // apenas atualiza a posicao do hero
-        this.jump(arena);
+        this.jump();
         Position heroPosition = this.getPosition();
         if (arena.checkMonsterCollision(heroPosition)) {
             System.out.println("Game Over!");
@@ -41,6 +41,7 @@ public class Hero extends Element {
             //if(!lastKeyType) activate elevator
             System.out.println("GOT A KEY"); //TEMPORARY
         }
+        arena.isOnElevator(this);
     }
 
 
@@ -54,7 +55,7 @@ public class Hero extends Element {
         isJumping=1;
         jumpStart = System.currentTimeMillis();
     }
-    public void jump(Arena arena) {
+    public void jump() {
         int jumpHeight = 1; //for now
         long currentTime = System.currentTimeMillis();
         long dt = currentTime - jumpStart;

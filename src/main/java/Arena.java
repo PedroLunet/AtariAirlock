@@ -21,8 +21,10 @@ public class Arena {
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
     private List<Monster> monsters = createMonsters();
     private List<Key> keys = createKeys();
+    private int elevatorKeysC = 0;
+    private int wallKeysC = 0;
     private boolean lastKeyType ;
-
+    private List<Elevator> elevators = createElevators() ;
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
@@ -56,6 +58,8 @@ public class Arena {
         for (Monster monster : monsters){ monster.draw(graphics);}
         hero.draw(graphics);
         for (Key key : keys){ key.draw(graphics);}
+        for(Elevator elevator : elevators) {elevator.draw(graphics);}
+
     }
     private void initializeWalls() {
         int topDistance = 8;
@@ -104,6 +108,7 @@ public class Arena {
             Position keyP = key.getPosition();
             if(heroP.samePosition(keyP)){
                 lastKeyType = key.getType();
+                collectKeys();
                 keys.remove(key);
                 return true;
             }
@@ -144,6 +149,30 @@ public class Arena {
             }
         }
         return keys;
+   }
+   public List<Elevator> createElevators(){ //TODO 
+        ArrayList<Elevator> elevators = new ArrayList<>();
+        elevators.add((new Elevator(new Position(33,24),new Position(36,24))));
+        return elevators;
+    }
+   public boolean isOnElevator(Hero hero){
+        for(Elevator e : elevators){
+            ArrayList<Integer> temp = e.getPosition();
+            int heroX = hero.getPosition().getX();
+            int heroY = hero.getPosition().getY();
+            if(heroX >= temp.get(0) && heroX <= temp.get(1) && heroY == temp.get(2)-1){
+                System.out.println("Im on the elevator"+ e );
+                return true;
+            }
+        }
+       return false;
+   }
+   public void collectKeys(){
+        if(!lastKeyType) {
+            elevators.get(elevatorKeysC).activateElevator();
+            elevatorKeysC++;
+        }
+        //else...
    }
 }
 
