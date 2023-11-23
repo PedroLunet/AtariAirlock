@@ -57,6 +57,7 @@ public class Game {
                 if(timeLeft == 0 ){screen.close();System.out.println("Game Over"); break;}
                 arena.hero.moveHero(arena);
                 arena.moveMonsters();
+                arena.startElevator();
             }
         }
     }

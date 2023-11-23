@@ -10,6 +10,7 @@ public class Hero extends Element {
 
     private int isJumping = 0;
     private long jumpStart;
+    private boolean ready=false;
     public void moveRight(Arena arena) {
         int newX = position.getX() + 1;
         Position newPosition = new Position(newX, position.getY());
@@ -41,7 +42,10 @@ public class Hero extends Element {
             //if(!lastKeyType) activate elevator
             System.out.println("GOT A KEY"); //TEMPORARY
         }
-        arena.isOnElevator(this);
+        if(arena.isOnElevator(this)) ready=true; else ready = false;
+    }
+    public boolean isReady(){
+        return ready;
     }
 
 

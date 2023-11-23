@@ -25,6 +25,7 @@ public class Arena {
     private int wallKeysC = 0;
     private boolean lastKeyType ;
     private List<Elevator> elevators = createElevators() ;
+    private Elevator lastElevator = elevators.get(0);
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
@@ -150,9 +151,12 @@ public class Arena {
         }
         return keys;
    }
-   public List<Elevator> createElevators(){ //TODO 
+   public List<Elevator> createElevators(){ //TODO
         ArrayList<Elevator> elevators = new ArrayList<>();
-        elevators.add((new Elevator(new Position(33,24),new Position(36,24))));
+        elevators.add((new Elevator(new Position(37,24),new Position(44,24))));
+        elevators.add((new Elevator(new Position(47,21),new Position(54,21))));
+        elevators.add((new Elevator(new Position(57,18),new Position(64,18))));
+        elevators.add((new Elevator(new Position(67,15),new Position(74,15))));
         return elevators;
     }
    public boolean isOnElevator(Hero hero){
@@ -170,9 +174,16 @@ public class Arena {
    public void collectKeys(){
         if(!lastKeyType) {
             elevators.get(elevatorKeysC).activateElevator();
+            lastElevator=elevators.get(elevatorKeysC);
             elevatorKeysC++;
         }
         //else...
+   }
+   public void startElevator(){
+        if(hero.isReady() && lastElevator.getActiveStatus()){
+            lastElevator.runElevator(hero);
+            score++;
+        }
    }
 }
 
