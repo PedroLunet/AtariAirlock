@@ -18,11 +18,15 @@ public class Arena {
     private List<Floor> floors;
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
     private List<Monster> monsters = createMonsters();
+    private int bottomD = 3;
+    private int sideD = 15;
+    private int floorSep = 4;
+    private int elevatorW = 8;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        hero = new Hero(25, 23);
+        hero = new Hero(25, 24);
         walls = createWalls();
         floors = createFloors();
     }
@@ -38,25 +42,64 @@ public class Arena {
         }
     }
 
-    public List<Wall> createWalls(){
+    public List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            walls.add(new Wall(i, 0));
-            walls.add(new Wall(i, 50));
+
+        int lowestFloorY = height - bottomD;
+        int highestFloorY = lowestFloorY - (floorSep * 3);
+
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(sideD, y));
         }
-        for (int i = 0; i < 50; i++) {
-            walls.add(new Wall(0, i));
-            walls.add(new Wall(100, i));
+
+        int mirroredX = width - sideD - 1; // Calculate mirrored X position
+
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(mirroredX, y));
         }
+
+        // Third wall (parallel to the left wall but inside by elevatorW)
+        int parallelX = sideD + elevatorW; // Calculate X position
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(parallelX, y));
+        }
+
+        // Fourth wall (mirrored position of the third wall)
+        int mirroredX2 = width - parallelX - 1; // Calculate mirrored X position
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(mirroredX2, y));
+        }
+
         return walls;
     }
 
-    public List<Floor> createFloors(){
+
+
+
+    public List<Floor> createFloors() {
         List<Floor> floors = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            floors.add(new Floor(i, 49));
+
+        int bottomFloorY = height - bottomD;
+        for (int x = sideD; x < width - sideD; x++) {
+            floors.add(new Floor(x, bottomFloorY));
+        }
+
+        int middleFloorY = bottomFloorY - floorSep;
+        int floorLength = width - 2 * (elevatorW + sideD);
+
+        for (int i = 0; i < 4; i++) {
+            int floorX = elevatorW + sideD;
+            floors.addAll(createSingleFloor(floorX, middleFloorY, floorLength));
+            middleFloorY -= floorSep;
         }
         return floors;
+    }
+    private List<Floor> createSingleFloor(int x, int y, int length) {
+        List<Floor> singleFloor = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            singleFloor.add(new Floor(x + i, y));
+        }
+        return singleFloor;
     }
 
     public void moveHero() { //move to hero class? // apenas atualiza a posicao do hero
@@ -69,6 +112,7 @@ public class Arena {
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
 
         graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
+
 
         for (Wall wall : walls){
             wall.draw(graphics);
