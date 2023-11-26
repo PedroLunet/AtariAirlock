@@ -19,7 +19,7 @@ public class Arena {
     private List<Floor> floors;
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3);
     private List<Monster> monsters = createMonsters();
-    private List<Key> keys = createKeys();
+    protected List<Key> keys = createKeys();
     private int elevatorKeysC = 0;
     private int wallKeysC = 0;
     private boolean lastKeyType;
