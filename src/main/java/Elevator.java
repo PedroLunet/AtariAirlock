@@ -40,11 +40,11 @@ public class Elevator {
     }
     public void runElevator(Hero hero){
         isActivated=false;
-        int jumpingHeight=3;
+        int elevatorHeight=4;
         ArrayList<Position> startingP = elevator;
         int startingY = startingP.get(0).getY();
         int newY=startingY-1;
-        while(isWorking <= jumpingHeight ){
+        while(isWorking <= elevatorHeight ){
             for(Position p : elevator){
                 p.setY(newY);
             }

@@ -14,25 +14,28 @@ public class Arena {
     private int width;
     private int height;
     public Hero hero;
-    private int score=0; // EACH LEVEL THE HERO REACHES THE SCORE WILL INCREMENT
-    private List<Position> vwalls;
-    private List<Position> hwalls;
-    private List<Position> allWalls = new ArrayList<>();;
-    private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3 , 4);
+    private int score = 0;
+    private List<Wall> walls;
+    private List<Floor> floors;
+    private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3);
     private List<Monster> monsters = createMonsters();
     private List<Key> keys = createKeys();
     private int elevatorKeysC = 0;
     private int wallKeysC = 0;
-    private boolean lastKeyType ;
-    private List<Elevator> elevators = createElevators() ;
+    private boolean lastKeyType;
+    private List<Elevator> elevators = createElevators();
     private Elevator lastElevator = elevators.get(0);
+    private int bottomD = 3;
+    private int sideD = 15;
+    private int floorSep = 4;
+    private int elevatorW = 8;
+
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        hero = new Hero(25, 23);
-        this.vwalls = new ArrayList<>();
-        this.hwalls = new ArrayList<>();
-        initializeWalls();
+        hero = new Hero(25, 24);
+        walls = createWalls();
+        floors = createFloors();
     }
 
     public void processKey(KeyStroke key) {
@@ -44,51 +47,95 @@ public class Arena {
             hero.startJump();
         }
     }
+
+    public List<Wall> createWalls() {
+        List<Wall> walls = new ArrayList<>();
+
+        int lowestFloorY = height - bottomD;
+        int highestFloorY = lowestFloorY - (floorSep * 3);
+
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(sideD, y));
+        }
+
+        int mirroredX = width - sideD - 1; // Calculate mirrored X position
+
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(mirroredX, y));
+        }
+
+        // Third wall (parallel to the left wall but inside by elevatorW)
+        int parallelX = sideD + elevatorW; // Calculate X position
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(parallelX, y));
+        }
+
+        // Fourth wall (mirrored position of the third wall)
+        int mirroredX2 = width - parallelX - 1; // Calculate mirrored X position
+        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
+            walls.add(new Wall(mirroredX2, y));
+        }
+
+        return walls;
+    }
+
+
+    public List<Floor> createFloors() {
+        List<Floor> floors = new ArrayList<>();
+
+        int bottomFloorY = height - bottomD;
+        for (int x = sideD; x < width - sideD; x++) {
+            floors.add(new Floor(x, bottomFloorY));
+        }
+
+        int middleFloorY = bottomFloorY - floorSep;
+        int floorLength = width - 2 * (elevatorW + sideD);
+
+        for (int i = 0; i < 4; i++) {
+            int floorX = elevatorW + sideD;
+            floors.addAll(createSingleFloor(floorX, middleFloorY, floorLength));
+            middleFloorY -= floorSep;
+        }
+        return floors;
+    }
+
+    private List<Floor> createSingleFloor(int x, int y, int length) {
+        List<Floor> singleFloor = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            singleFloor.add(new Floor(x + i, y));
+        }
+        return singleFloor;
+    }
+
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
         graphics.putString(new TerminalPosition(70, 5), "Time Left= " + Game.getTime());
-        graphics.putString(new TerminalPosition(20,5),"SCORE " + score);
-        for (Position wall : vwalls) {
-            graphics.setCharacter(wall.getX(), wall.getY(), '\u2588');
+        graphics.putString(new TerminalPosition(20, 5), "SCORE " + score);
+        for (Wall wall : walls) {
+            wall.draw(graphics);
         }
-        for (Position wall : hwalls) {
-            graphics.setCharacter(wall.getX(), wall.getY(), '\u2580');
+
+        for (Floor floor : floors) {
+            floor.draw(graphics);
         }
-        for (Monster monster : monsters){ monster.draw(graphics);}
+        for (Monster monster : monsters) {
+            monster.draw(graphics);
+        }
         hero.draw(graphics);
-        for (Key key : keys){ key.draw(graphics);}
-        for(Elevator elevator : elevators) {elevator.draw(graphics);}
-
-    }
-    private void initializeWalls() {
-        int topDistance = 8;
-        int bottomDistance = 2;
-        int sideDistance = 15;
-        int elevatorWidth = 8;
-        int floorSeparation = 2;
-
-        for (int x = sideDistance; x < width - sideDistance; x++) {
-            vwalls.add(new Position(x, height - bottomDistance - 2));
+        for (Key key : keys) {
+            key.draw(graphics);
+        }
+        for (Elevator elevator : elevators) {
+            elevator.draw(graphics);
         }
 
-        for (int y = topDistance + 1; y < height - bottomDistance - 2; y++) {
-            vwalls.add(new Position(sideDistance, y));
-            vwalls.add(new Position(sideDistance + elevatorWidth - 1, y));
-            vwalls.add(new Position(width - sideDistance - 1, y));
-            vwalls.add(new Position(width - sideDistance - elevatorWidth, y));
-            if ((y - topDistance - 1) % (floorSeparation + 1) == 0) {
-                for (int x = sideDistance + elevatorWidth; x < width - sideDistance - elevatorWidth; x++) {
-                    hwalls.add(new Position(x, y));
-                }
-            }
-        }
     }
+
     public boolean checkWalls(Position p){
-        if(allWalls.isEmpty()){ allWalls.addAll(vwalls); allWalls.addAll(hwalls);}
-        for (Position wall : allWalls) {
-            if(p.samePosition(wall)){
+        for (Wall wall : walls) {
+            if(p.samePosition(wall.getPosition())){
                 return true;
             }
         }
@@ -103,11 +150,11 @@ public class Arena {
         }
         return false; // Se nao tiver colisão
     }
-    public boolean checkKeyCollision(Hero hero){
+    public boolean checkKeyCollision(Hero hero) {
         Position heroP = hero.getPosition();
-        for(Key key : keys){
+        for (Key key : keys) {
             Position keyP = key.getPosition();
-            if(heroP.samePosition(keyP)){
+            if (heroP.samePosition(keyP)) {
                 lastKeyType = key.getType();
                 collectKeys();
                 keys.remove(key);
@@ -117,73 +164,73 @@ public class Arena {
         return false;
     }
 
-   public List<Monster> createMonsters() {
-       int min = 23; // Parede da esquerda
-       int max = 76; // Parede da direita
-       Random random = new Random();
-       ArrayList<Monster> monsters = new ArrayList<>();
-       monsters.add(new Monster(65, 23));
-       for (int j = 1; j < monstersplevel.size(); j++) {
-           for (int i = 0; i < monstersplevel.get(j); i++) {
-               int ri = random.nextInt(max - min + 1) + min;
-               monsters.add(new Monster(ri, 23 - 3 * j));
-           }
-       }
-       return monsters;
-   }
-   public void moveMonsters(){
-        for(Monster monster : monsters){
+
+    public List<Monster> createMonsters () {
+        int min = 23; // Parede da esquerda
+        int max = 76; // Parede da direita
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        monsters.add(new Monster(65, 24));
+        for (int j = 1; j < monstersplevel.size(); j++) {
+            for (int i = 0; i < monstersplevel.get(j); i++) {
+                int ri = random.nextInt(max - min + 1) + min;
+                monsters.add(new Monster(ri, 24 - 4 * j));
+            }
+        }
+        return monsters;
+    }
+    public void moveMonsters () {
+        for (Monster monster : monsters) {
             monster.move(this);
         }
-   }
-   public List<Key> createKeys(){
+    }
+    public List<Key> createKeys () {
         //ESTA FUNCAO ESTA FEITA PARA A ARENA ANTIGA , ALTERAR LINHAS 118 119 122 E 126(Y COORDINATE)
         int min = 23; //Parede esquerda
         int max = 76; //Parede direita
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
-        for(int j = 0 ; j< 4 ; j++){
-            for(int i = 0 ; i<2 ; i++){
+        for (int j = 0; j < 4; j++) {
+            for (int i = 0; i < 2; i++) {
                 int ri = random.nextInt(max - min + 1) + min;
-                boolean type= i==0 ;
-                keys.add(new Key (ri, 23-3*j - 1 , type));
+                boolean type = i == 0;
+                keys.add(new Key(ri, 23 - 4 * j - 1, type));
             }
         }
         return keys;
-   }
-   public List<Elevator> createElevators(){ //TODO
+    }
+    public List<Elevator> createElevators () { //TODO
         ArrayList<Elevator> elevators = new ArrayList<>();
-        elevators.add((new Elevator(new Position(37,24),new Position(44,24))));
-        elevators.add((new Elevator(new Position(47,21),new Position(54,21))));
-        elevators.add((new Elevator(new Position(57,18),new Position(64,18))));
-        elevators.add((new Elevator(new Position(67,15),new Position(74,15))));
+        elevators.add((new Elevator(new Position(37, 25), new Position(44, 25))));
+        elevators.add((new Elevator(new Position(47, 21), new Position(54, 21))));
+        elevators.add((new Elevator(new Position(57, 17), new Position(64, 17))));
+        elevators.add((new Elevator(new Position(67, 13), new Position(74, 13))));
         return elevators;
     }
-   public boolean isOnElevator(Hero hero){
-        for(Elevator e : elevators){
+    public boolean isOnElevator (Hero hero){
+        for (Elevator e : elevators) {
             ArrayList<Integer> temp = e.getPosition();
             int heroX = hero.getPosition().getX();
             int heroY = hero.getPosition().getY();
-            if(heroX >= temp.get(0) && heroX <= temp.get(1) && heroY == temp.get(2)-1){
-                System.out.println("Im on the elevator"+ e );
+            if (heroX >= temp.get(0) && heroX <= temp.get(1) && heroY == temp.get(2) - 1) {
+                System.out.println("Im on the elevator" + e);
                 return true;
             }
         }
-       return false;
-   }
-   public void collectKeys(){
-        if(!lastKeyType) {
+        return false;
+    }
+    public void collectKeys() {
+        if (!lastKeyType) {
             elevators.get(elevatorKeysC).activateElevator();
-            lastElevator=elevators.get(elevatorKeysC);
+            lastElevator = elevators.get(elevatorKeysC);
             elevatorKeysC++;
         }
         //else...
-   }
-   public void startElevator(){
-        if(hero.isReady() && lastElevator.getActiveStatus()){
+    }
+    public void startElevator() {
+        if (hero.isReady() && lastElevator.getActiveStatus()) {
             lastElevator.runElevator(hero);
             score++;
         }
-   }
+    }
 }
-

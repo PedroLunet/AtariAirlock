@@ -4,7 +4,6 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import java.util.*;
 
 import java.io.IOException;
 
@@ -22,17 +21,14 @@ public class Game {
         TerminalSize terminalSize = new TerminalSize(width, height);
         arena = new Arena(width, height);
     }
-
     private void draw() throws IOException {
         screen.clear();
         arena.draw(screen.newTextGraphics());
         screen.refresh();
     }
-
     public void run() throws IOException, InterruptedException {
         boolean gameStarted = false;
         long startingTime = 0;
-        long lastPrinted=0;
         while (true) {
             draw();
             KeyStroke key = screen.pollInput(); //Em vez de esperar por input o while corre sempre poll != read

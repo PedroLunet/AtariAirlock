@@ -33,13 +33,9 @@ public class Hero extends Element {
         Position heroPosition = this.getPosition();
         if (arena.checkMonsterCollision(heroPosition)) {
             System.out.println("Game Over!");
-            // Se houver colisão, o jogo termina
-            System.exit(0); // Esta é uma forma simples de interromper o jogo. Dependendo do ambiente e da estrutura, pode ser necessário usar outro método para interromper o jogo.
+            System.exit(0);
         }
         if(arena.checkKeyCollision(this)){
-            //WE CHANGE THIS TO ELEVATOR PROPERTIES
-            //if(lastKeyType) open walls
-            //if(!lastKeyType) activate elevator
             System.out.println("GOT A KEY"); //TEMPORARY
         }
         if(arena.isOnElevator(this)) ready=true; else ready = false;
