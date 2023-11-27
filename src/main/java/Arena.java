@@ -5,10 +5,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Arena {
     private int width;
@@ -165,6 +162,19 @@ public class Arena {
             coin.draw(graphics);
         }
     }
+
+
+
+    public void removeCoin() {
+        Iterator<Coin> coinIterator = coins.iterator();
+        while (coinIterator.hasNext()) {
+            Coin coin = coinIterator.next();
+            if (hero.getPosition().samePosition(coin.getPosition())) {
+                coinIterator.remove();
+            }
+        }
+    }
+
 
     public boolean checkCoinCollision(Position heroPosition) {
         for (Coin coin : coins) {
