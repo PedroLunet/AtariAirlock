@@ -166,8 +166,8 @@ public class Arena {
 
 
     public List<Monster> createMonsters () {
-        int min = 23; // Parede da esquerda
-        int max = 76; // Parede da direita
+        int min = 24; // Parede da esquerda
+        int max = 75; // Parede da direita
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
         monsters.add(new Monster(65, 24));
@@ -186,8 +186,8 @@ public class Arena {
     }
     public List<Key> createKeys () {
         //ESTA FUNCAO ESTA FEITA PARA A ARENA ANTIGA , ALTERAR LINHAS 118 119 122 E 126(Y COORDINATE)
-        int min = 23; //Parede esquerda
-        int max = 76; //Parede direita
+        int min = 24; //Parede esquerda
+        int max = 75; //Parede direita
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
         for (int j = 0; j < 4; j++) {
