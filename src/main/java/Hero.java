@@ -35,6 +35,9 @@ public class Hero extends Element {
             System.out.println("Game Over!");
             System.exit(0);
         }
+        if (arena.checkCoinCollision(heroPosition)) {
+            System.out.println("Got a coin!");
+        }
         if(arena.checkKeyCollision(this)){
             System.out.println("GOT A KEY"); //TEMPORARY
         }

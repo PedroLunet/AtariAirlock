@@ -164,7 +164,16 @@ public class Arena {
         for (Coin coin : coins) {
             coin.draw(graphics);
         }
+    }
 
+    public boolean checkCoinCollision(Position heroPosition) {
+        for (Coin coin : coins) {
+            Position coinPosition = coin.getPosition();
+            if (heroPosition.samePosition(coinPosition)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean checkWalls(Position p){
