@@ -17,6 +17,7 @@ public class Arena {
     private int score = 0;
     private List<Wall> walls;
     private List<Floor> floors;
+    private List<Coin> coins;
     private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3);
     private List<Monster> monsters = createMonsters();
     protected List<Key> keys = createKeys();
@@ -36,6 +37,7 @@ public class Arena {
         hero = new Hero(25, 24);
         walls = createWalls();
         floors = createFloors();
+        coins = createCoins();
     }
 
     public void processKey(KeyStroke key) {
@@ -77,6 +79,35 @@ public class Arena {
         }
 
         return walls;
+    }
+
+    public List<Coin> createCoins() {
+        List<Coin> coins = new ArrayList<>();
+        Random random = new Random();
+        int numCoins1 = random.nextInt(5) + 1;
+        int numCoins2 = random.nextInt(5) + 1;
+        int numCoins3 = random.nextInt(5) + 1;
+        int numCoins4 = random.nextInt(5) + 1;
+        int maxX = 75;
+        int minX = 26;
+
+        for (int i = 0; i < numCoins1; i++) {
+            int x = random.nextInt((maxX - minX) + 1) + minX;
+            coins.add(new Coin(x, 22));
+        }
+        for (int i = 0; i < numCoins2; i++) {
+            int x = random.nextInt((maxX - minX) + 1) + minX;
+            coins.add(new Coin(x, 18));
+        }
+        for (int i = 0; i < numCoins3; i++) {
+            int x = random.nextInt((maxX - minX) + 1) + minX;
+            coins.add(new Coin(x, 14));
+        }
+        for (int i = 0; i < numCoins4; i++) {
+            int x = random.nextInt((maxX - minX) + 1) + minX;
+            coins.add(new Coin(x, 10));
+        }
+        return coins;
     }
 
 
@@ -129,6 +160,9 @@ public class Arena {
         }
         for (Elevator elevator : elevators) {
             elevator.draw(graphics);
+        }
+        for (Coin coin : coins) {
+            coin.draw(graphics);
         }
 
     }
@@ -186,8 +220,8 @@ public class Arena {
     }
     public List<Key> createKeys () {
         //ESTA FUNCAO ESTA FEITA PARA A ARENA ANTIGA , ALTERAR LINHAS 118 119 122 E 126(Y COORDINATE)
-        int min = 23; //Parede esquerda
-        int max = 76; //Parede direita
+        int min = 24; //Parede esquerda
+        int max = 75; //Parede direita
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
         for (int j = 0; j < 4; j++) {
