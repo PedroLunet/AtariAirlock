@@ -5,10 +5,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Arena {
     private int width;
@@ -17,7 +14,8 @@ public class Arena {
     private int score = 0;
     private List<Wall> walls;
     private List<Floor> floors;
-    private List<Integer> monstersplevel = Arrays.asList(1, 2, 3, 3);
+    private List<Integer> normalMonsterspLevel = Arrays.asList(1, 2, 2, 3);
+    private List<Integer> shootingMonsterspLevel = Arrays.asList(1,1,1,1);
     private List<Monster> monsters = createMonsters();
     protected List<Key> keys = createKeys();
     private int elevatorKeysC = 0;
@@ -29,7 +27,7 @@ public class Arena {
     private int sideD = 15;
     private int floorSep = 4;
     private int elevatorW = 8;
-    public static List<Bullet> bullets = new ArrayList<>();
+    public List<Bullet> bullets = new ArrayList<>();
 
     public Arena(int width, int height) {
         this.width = width;
@@ -170,7 +168,9 @@ public class Arena {
     public boolean checkBulletCollision(Hero hero){
         for(Bullet b : bullets){
             Position bpos =b.getPosition();
-            if(bpos==hero.getPosition()) return true;
+            //System.out.println("Bullet at- "+bpos);
+            //System.out.println("Hero at- " +hero.getPosition());
+            if(bpos.samePosition(hero.getPosition())) return true;
         }
         return false;
     }
@@ -181,10 +181,14 @@ public class Arena {
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
         monsters.add(new ShootingMonster(65, 24));
-        for (int j = 1; j < monstersplevel.size(); j++) {
-            for (int i = 0; i < monstersplevel.get(j); i++) {
+        for (int j = 1; j < normalMonsterspLevel.size(); j++) {
+            for (int i = 0; i < normalMonsterspLevel.get(j); i++) {
                 int ri = random.nextInt(max - min + 1) + min;
                 monsters.add(new NormalMonster(ri, 24 - 4 * j));
+            }
+            for (int i = 0; i < shootingMonsterspLevel.get(j); i++) {
+                int ri = random.nextInt(max - min + 1) + min;
+                monsters.add(new ShootingMonster(ri, 24 - 4 * j));
             }
         }
         return monsters;
@@ -223,7 +227,6 @@ public class Arena {
             int heroX = hero.getPosition().getX();
             int heroY = hero.getPosition().getY();
             if (heroX >= temp.get(0) && heroX <= temp.get(1) && heroY == temp.get(2) - 1) {
-                System.out.println("Im on the elevator" + e);
                 return true;
             }
         }
@@ -241,18 +244,16 @@ public class Arena {
         if (hero.isReady() && lastElevator.getActiveStatus()) {
             lastElevator.runElevator(hero);
             score++;
-            bullets.clear();
         }
     }
     public void checkForMonsters(){
         for(Monster m : monsters){
-            if(m instanceof ShootingMonster && m.getPosition().getY() == hero.getPosition().getY()){
-                ((ShootingMonster) m).monsterShoot(hero);
-            }
+           m.action(this, hero);
         }
     }
-    public void moveBullets(){
-        if(bullets.isEmpty()) return ;
-        for(Bullet bullet : bullets){bullet.move(this);}
+    public void moveBullets() {
+        if (bullets.isEmpty()) return;
+        bullets.removeIf(bullet -> bullet.move(this));
     }
+
 }

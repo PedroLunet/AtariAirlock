@@ -5,25 +5,14 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 public class ShootingMonster extends Monster {
     private long lasTimeShot=0;
     public ShootingMonster(int x, int y) {
-        super(x, y);
+        super(x,y,"S");
     }
-
-    @Override
-    public void move(Arena arena) {
-        return ;
-    }
-
-    @Override
-    public void draw(TextGraphics graphics) {
-        graphics.setForegroundColor(TextColor.Factory.fromString("#0000FF"));//blue for now
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "S");
-    }
-
-    public void monsterShoot(Hero hero){
+    public void action(Arena arena ,Hero hero){
+        if(hero.getPosition().getY()!=this.getPosition().getY()) return ;
         if(System.currentTimeMillis()-lasTimeShot>3000) {
             int direction = hero.getPosition().getX() > this.getPosition().getX() ? 1 : -1;
             Bullet b = new Bullet(this.getPosition().getX() + direction , this.getPosition().getY(), direction, 100);
-            Arena.bullets.add(b);
+            arena.bullets.add(b);
             lasTimeShot=System.currentTimeMillis();
         }
     }

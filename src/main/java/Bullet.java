@@ -16,14 +16,16 @@ public class Bullet extends Element {
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFFFF"));//white for now
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), "\u25B4");
     }
-    public void move(Arena arena) {
+    public boolean  move(Arena arena) {
+        boolean toRemove=false;
         long currentTime = System.currentTimeMillis();
-        if(Arena.bullets.isEmpty()) return ;
+        if(arena.bullets.isEmpty()) return toRemove;
         if (currentTime - lastTimeMoved > speed) {
             position.setX(position.getX() + direction);
             Position newp= new Position(position.getX() + direction,this.getPosition().getY());
-            if(arena.checkWalls(newp)) Arena.bullets.remove(this);
+            if(arena.checkWalls(newp)) toRemove = true;
             lastTimeMoved = currentTime;
         }
+        return toRemove;
     }
 }
