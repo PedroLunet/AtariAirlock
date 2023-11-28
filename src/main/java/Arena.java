@@ -29,6 +29,7 @@ public class Arena {
     private int sideD = 15;
     private int floorSep = 4;
     private int elevatorW = 8;
+    public static List<Bullet> bullets = new ArrayList<>();
 
     public Arena(int width, int height) {
         this.width = width;
@@ -130,6 +131,9 @@ public class Arena {
         for (Elevator elevator : elevators) {
             elevator.draw(graphics);
         }
+        for (Bullet bullet : bullets){
+            bullet.draw(graphics);
+        }
 
     }
 
@@ -163,18 +167,24 @@ public class Arena {
         }
         return false;
     }
-
+    public boolean checkBulletCollision(Hero hero){
+        for(Bullet b : bullets){
+            Position bpos =b.getPosition();
+            if(bpos==hero.getPosition()) return true;
+        }
+        return false;
+    }
 
     public List<Monster> createMonsters () {
         int min = 24; // Parede da esquerda
         int max = 75; // Parede da direita
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
-        monsters.add(new Monster(65, 24));
+        monsters.add(new ShootingMonster(65, 24));
         for (int j = 1; j < monstersplevel.size(); j++) {
             for (int i = 0; i < monstersplevel.get(j); i++) {
                 int ri = random.nextInt(max - min + 1) + min;
-                monsters.add(new Monster(ri, 24 - 4 * j));
+                monsters.add(new NormalMonster(ri, 24 - 4 * j));
             }
         }
         return monsters;
@@ -231,6 +241,18 @@ public class Arena {
         if (hero.isReady() && lastElevator.getActiveStatus()) {
             lastElevator.runElevator(hero);
             score++;
+            bullets.clear();
         }
+    }
+    public void checkForMonsters(){
+        for(Monster m : monsters){
+            if(m instanceof ShootingMonster && m.getPosition().getY() == hero.getPosition().getY()){
+                ((ShootingMonster) m).monsterShoot(hero);
+            }
+        }
+    }
+    public void moveBullets(){
+        if(bullets.isEmpty()) return ;
+        for(Bullet bullet : bullets){bullet.move(this);}
     }
 }

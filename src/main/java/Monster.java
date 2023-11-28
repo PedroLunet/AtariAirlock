@@ -4,7 +4,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 
 import java.util.Random;
 
-public class Monster extends Element {
+public abstract class Monster extends Element {
     //Add direction
     private int direction;
     public long lastTimeMoved;
@@ -16,7 +16,6 @@ public class Monster extends Element {
         speed = 250+(long) (Math.random() * 250); // Cada monstro move se com velocidade diferente
                                                   // 250 milisegundso + random por movimento
     }
-
     @Override
     public void draw(TextGraphics graphics) {
         graphics.setForegroundColor(TextColor.Factory.fromString("#0000FF"));//blue for now
@@ -39,6 +38,4 @@ public class Monster extends Element {
             }
         }
     }
-    //Future Ideas
-    //Maybe add monster types?
 }

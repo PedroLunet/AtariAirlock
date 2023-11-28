@@ -54,6 +54,8 @@ public class Game {
                 arena.hero.moveHero(arena);
                 arena.moveMonsters();
                 arena.startElevator();
+                arena.checkForMonsters();
+                arena.moveBullets();
             }
         }
     }
