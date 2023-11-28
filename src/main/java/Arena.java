@@ -14,6 +14,7 @@ public class Arena {
     private int score = 0;
     private int level = 0;
     private List<Wall> walls;
+    private List<Door> doors;
     private List<Floor> floors;
     private List<Coin> coins;
     private List<Integer> normalMonsterspLevel = Arrays.asList(1, 2, 2, 3);
@@ -37,6 +38,7 @@ public class Arena {
         walls = createWalls();
         floors = createFloors();
         coins = createCoins();
+        doors = createDoors();
     }
 
     public void processKey(KeyStroke key) {
@@ -64,21 +66,52 @@ public class Arena {
         for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
             walls.add(new Wall(mirroredX, y));
         }
-
-        // Third wall (parallel to the left wall but inside by elevatorW)
-        int parallelX = sideD + elevatorW; // Calculate X position
-        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
-            walls.add(new Wall(parallelX, y));
-        }
-
-        // Fourth wall (mirrored position of the third wall)
-        int mirroredX2 = width - parallelX - 1; // Calculate mirrored X position
-        for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
-            walls.add(new Wall(mirroredX2, y));
-        }
-
         return walls;
     }
+
+    public List<Door> createDoors() {
+        List<Door> doors = new ArrayList<>();
+        int startY = 24;
+
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(23, y));
+        }
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(76, y));
+        }
+        startY = 20;
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(23, y));
+        }
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(76, y));
+        }
+        startY = 16;
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(23, y));
+        }
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(76, y));
+        }
+        startY = 12;
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(23, y));
+        }
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(76, y));
+        }
+        return doors;
+    }
+
+
 
     public List<Coin> createCoins() {
         List<Coin> coins = new ArrayList<>();
@@ -168,6 +201,9 @@ public class Arena {
         for (Coin coin : coins) {
             coin.draw(graphics);
         }
+        for (Door door : doors) {
+            door.draw(graphics);
+        }
     }
     public void checkHeroCollisions(){
         if (checkMonsterCollision(hero.getPosition())) {
@@ -202,16 +238,16 @@ public class Arena {
                 return true;
             }
         }
-        return false; // No collision
+        return false;
     }
     public boolean checkMonsterCollision(Position heroPosition) {
         for (Monster monster : monsters) {
             Position monsterPosition = monster.getPosition();
             if (heroPosition.samePosition(monsterPosition)) {
-                return true; // Se tiver Colisão
+                return true;
             }
         }
-        return false; // Se nao tiver colisão
+        return false;
     }
     public boolean checkKeyCollision(Hero hero) {
         Iterator<Key> keysIterator = keys.iterator();
@@ -237,9 +273,10 @@ public class Arena {
         return false;
     }
 
+
     public List<Monster> createMonsters () {
-        int min = 24; // Parede da esquerda
-        int max = 75; // Parede da direita
+        int min = 24;
+        int max = 75;
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
         monsters.add(new ShootingMonster(65, 24));
@@ -261,9 +298,8 @@ public class Arena {
         }
     }
     public List<Key> createKeys () {
-        //ESTA FUNCAO ESTA FEITA PARA A ARENA ANTIGA , ALTERAR LINHAS 118 119 122 E 126(Y COORDINATE)
-        int min = 24; //Parede esquerda
-        int max = 75; //Parede direita
+        int min = 24;
+        int max = 75;
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
         for (int j = 0; j < 4; j++) {
@@ -275,7 +311,7 @@ public class Arena {
         }
         return keys;
     }
-    public List<Elevator> createElevators () { //TODO
+    public List<Elevator> createElevators () {
         ArrayList<Elevator> elevators = new ArrayList<>();
         elevators.add((new Elevator(new Position(16, 25), new Position(22, 25))));
         elevators.add((new Elevator(new Position(77, 21), new Position(83, 21))));
