@@ -22,6 +22,9 @@ public class Hero extends Element {
         if (!arena.checkWalls(newPosition)) {
             setPosition(new Position(newX, position.getY()));
         }
+        if (!arena.checkDoors(newPosition)) {
+            setPosition(new Position(newX, position.getY()));
+        }
     }
     public void moveLeft(Arena arena) {
         if(isFrozen) return;
@@ -29,6 +32,9 @@ public class Hero extends Element {
         Position newPosition = new Position(newX, position.getY());
 
         if (!arena.checkWalls(newPosition)) {
+            setPosition(new Position(newX, position.getY()));
+        }
+        if (!arena.checkDoors(newPosition)) {
             setPosition(new Position(newX, position.getY()));
         }
     }
