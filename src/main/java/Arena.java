@@ -240,6 +240,14 @@ public class Arena {
         }
         return false;
     }
+    public boolean checkDoors(Position p){
+        for (Door door : doors) {
+            if(p.samePosition(door.getPosition())){
+                return true;
+            }
+        }
+        return false;
+    }
     public boolean checkMonsterCollision(Position heroPosition) {
         for (Monster monster : monsters) {
             Position monsterPosition = monster.getPosition();
