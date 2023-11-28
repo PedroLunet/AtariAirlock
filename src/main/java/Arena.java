@@ -277,10 +277,10 @@ public class Arena {
     }
     public List<Elevator> createElevators () { //TODO
         ArrayList<Elevator> elevators = new ArrayList<>();
-        elevators.add((new Elevator(new Position(37, 25), new Position(44, 25))));
-        elevators.add((new Elevator(new Position(47, 21), new Position(54, 21))));
-        elevators.add((new Elevator(new Position(57, 17), new Position(64, 17))));
-        elevators.add((new Elevator(new Position(67, 13), new Position(74, 13))));
+        elevators.add((new Elevator(new Position(16, 25), new Position(22, 25))));
+        elevators.add((new Elevator(new Position(77, 21), new Position(83, 21))));
+        elevators.add((new Elevator(new Position(16, 17), new Position(22, 17))));
+        elevators.add((new Elevator(new Position(77, 13), new Position(83, 13))));
         return elevators;
     }
     public boolean isOnElevator (Hero hero){
