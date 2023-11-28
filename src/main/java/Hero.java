@@ -41,6 +41,10 @@ public class Hero extends Element {
         if(arena.checkKeyCollision(this)){
             System.out.println("GOT A KEY"); //TEMPORARY
         }
+        if (arena.checkBulletCollision(this)) {
+            System.out.println("Game Over!");
+            System.exit(0);
+        }
         if(arena.isOnElevator(this)) ready=true; else ready = false;
     }
     public boolean isReady(){
