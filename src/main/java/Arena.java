@@ -281,6 +281,18 @@ public class Arena {
         return false;
     }
 
+    private void removeDoorAtLevel(int levelY) {
+        Iterator<Door> doorIterator = doors.iterator();
+
+        while (doorIterator.hasNext()) {
+            Door door = doorIterator.next();
+
+            if (door.getPosition().getY() == levelY) {
+                doorIterator.remove();
+            }
+        }
+    }
+
 
     public List<Monster> createMonsters () {
         int min = 24;
