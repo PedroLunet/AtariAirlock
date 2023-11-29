@@ -12,7 +12,7 @@ public class ActionsTests {
         Hero hero = new Hero(25, 24);
         arena.hero = hero;
 
-        Key key = new Key(25, 24, true);
+        Key key = new Key(25, 24);
         arena.keys.clear();
         arena.keys.add(key);
 

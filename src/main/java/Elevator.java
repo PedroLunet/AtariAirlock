@@ -30,14 +30,6 @@ public class Elevator {
         temp.add(startingP.getY());
         return temp;
     }
-    public void activateElevator(){
-        isActivated = true;
-        isWorking=1;
-        System.out.println("Got an elevator key");
-    }
-    public boolean getActiveStatus(){
-        return isActivated;
-    }
     public void runElevator(Hero hero){
         isActivated=false;
         int elevatorHeight=4;

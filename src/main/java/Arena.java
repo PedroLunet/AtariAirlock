@@ -310,12 +310,9 @@ public class Arena {
         int max = 75;
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
-        for (int j = 0; j < 4; j++) {
-            for (int i = 0; i < 2; i++) {
-                int ri = random.nextInt(max - min + 1) + min;
-                boolean type = i == 0;
-                keys.add(new Key(ri, 23 - 4 * j - 1, type));
-            }
+        for(int i = 22 ; i > 7 ; i = i - 4){
+            int ri = random.nextInt(max - min + 1) + min;
+            keys.add(new Key(ri, i));
         }
         return keys;
     }
@@ -348,7 +345,7 @@ public class Arena {
         //else...
     }
     public void startElevator() {
-        if (hero.isReady() && lastElevator.getActiveStatus()) {
+        if (hero.isReady()) {
             lastElevator.runElevator(hero);
             level++;
         }
