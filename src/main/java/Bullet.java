@@ -16,7 +16,7 @@ public class Bullet extends Element {
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFFFF"));//white for now
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), "\u25B4");
     }
-    public boolean  move(Arena arena) {
+    public boolean move(Arena arena) {
         boolean toRemove=false;
         long currentTime = System.currentTimeMillis();
         if(arena.bullets.isEmpty()) return toRemove;
@@ -24,6 +24,7 @@ public class Bullet extends Element {
             position.setX(position.getX() + direction);
             Position newp= new Position(position.getX() + direction,this.getPosition().getY());
             if(arena.checkWalls(newp)) toRemove = true;
+            if(arena.checkBulletCollision(arena.hero)) toRemove=true;
             lastTimeMoved = currentTime;
         }
         return toRemove;

@@ -7,11 +7,14 @@ public class Hero extends Element {
     public Hero(int x, int y) {
         super(x, y);
     }
-
+    private int hp=100;
     private int isJumping = 0;
     private long jumpStart;
     private boolean ready=false;
+    private boolean isFrozen=false;
+    private long freezeStart = 0;
     public void moveRight(Arena arena) {
+        if(isFrozen) return;
         int newX = position.getX() + 1;
         Position newPosition = new Position(newX, position.getY());
 
@@ -19,8 +22,8 @@ public class Hero extends Element {
             setPosition(new Position(newX, position.getY()));
         }
     }
-
     public void moveLeft(Arena arena) {
+        if(isFrozen) return;
         int newX = position.getX() - 1;
         Position newPosition = new Position(newX, position.getY());
 
@@ -28,23 +31,11 @@ public class Hero extends Element {
             setPosition(new Position(newX, position.getY()));
         }
     }
-    public void moveHero(Arena arena) { // apenas atualiza a posicao do hero
-        this.jump();
+    public void moveHero(Arena arena) {
+        if(isFrozen) return;
+        this.jump(System.currentTimeMillis());
         Position heroPosition = this.getPosition();
-        if (arena.checkMonsterCollision(heroPosition)) {
-            System.out.println("Game Over!");
-            System.exit(0);
-        }
-        if (arena.checkCoinCollision(heroPosition)) {
-            arena.removeCoin();
-        }
-        if(arena.checkKeyCollision(this)){
-            System.out.println("GOT A KEY"); //TEMPORARY
-        }
-        if (arena.checkBulletCollision(this)) {
-            System.out.println("Game Over!");
-            System.exit(0);
-        }
+        arena.checkCollisions();
         if(arena.isOnElevator(this)) ready=true; else ready = false;
     }
     public boolean isReady(){
@@ -53,7 +44,12 @@ public class Hero extends Element {
 
 
     public void draw(TextGraphics graphics) {
-        graphics.setForegroundColor(TextColor.Factory.fromString("#CD2C0C"));
+        if(isFrozen){
+            graphics.setForegroundColor(TextColor.Factory.fromString("#ADD8E6"));
+        }
+        else{
+            graphics.setForegroundColor(TextColor.Factory.fromString("#CD2C0C"));
+        }
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
     }
@@ -62,9 +58,8 @@ public class Hero extends Element {
         isJumping=1;
         jumpStart = System.currentTimeMillis();
     }
-    public void jump() {
+    public void jump(long currentTime) {
         int jumpHeight = 1; //for now
-        long currentTime = System.currentTimeMillis();
         long dt = currentTime - jumpStart;
         Position startingP = getPosition();
         int speed = 3;
@@ -93,5 +88,18 @@ public class Hero extends Element {
             isJumping = 0;
             return;
         }
+    }
+    public void freeze(){
+        isFrozen=true;
+        freezeStart= System.currentTimeMillis();
+    }
+    public void updateFreezeState(long currentTime) {
+        if (isFrozen && currentTime - freezeStart > 2000) {
+            isFrozen = false;
+        }
+    }
+    public void setHp(int i){
+        System.out.println("OUCH!");
+        hp+=i;
     }
 }

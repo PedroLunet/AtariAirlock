@@ -56,6 +56,8 @@ public class Game {
                 arena.startElevator();
                 arena.checkForMonsters();
                 arena.moveBullets();
+                arena.checkCollisions();
+                arena.hero.updateFreezeState(System.currentTimeMillis());
             }
         }
     }

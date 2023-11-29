@@ -153,6 +153,7 @@ public class Arena {
         for (Monster monster : monsters) {
             monster.draw(graphics);
         }
+        if(this.checkBulletCollision(hero)){hero.draw(graphics);};
         hero.draw(graphics);
         for (Key key : keys) {
             key.draw(graphics);
@@ -167,7 +168,22 @@ public class Arena {
             coin.draw(graphics);
         }
     }
-
+    public void checkCollisions(){
+        if (checkMonsterCollision(hero.getPosition())) {
+            hero.setHp(-20);
+        }
+        if (checkCoinCollision(hero.getPosition())) {
+            removeCoin();
+        }
+        if(checkKeyCollision(hero)){
+            System.out.println("GOT A KEY");
+        }
+        if(checkBulletCollision(hero)) {
+            hero.setHp(-20);
+            hero.freeze();
+            System.out.println("got shot");
+        }
+    }
 
 
     public void removeCoin() {
@@ -224,8 +240,8 @@ public class Arena {
     public boolean checkBulletCollision(Hero hero){
         for(Bullet b : bullets){
             Position bpos =b.getPosition();
-            //System.out.println("Bullet at- "+bpos);
-            //System.out.println("Hero at- " +hero.getPosition());
+            System.out.println("Bullet at-"+ bpos);
+            System.out.println("Hero at-"+ hero.getPosition());
             if(bpos.samePosition(hero.getPosition())) return true;
         }
         return false;
@@ -311,5 +327,4 @@ public class Arena {
         if (bullets.isEmpty()) return;
         bullets.removeIf(bullet -> bullet.move(this));
     }
-
 }
