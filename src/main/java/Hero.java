@@ -13,6 +13,7 @@ public class Hero extends Element {
     private boolean ready=false;
     private boolean isFrozen=false;
     private long freezeStart = 0;
+    private long lastTimeHit = 0;
     public void moveRight(Arena arena) {
         if(isFrozen) return;
         int newX = position.getX() + 1;
@@ -31,18 +32,23 @@ public class Hero extends Element {
             setPosition(new Position(newX, position.getY()));
         }
     }
-    public void moveHero(Arena arena) {
+    public void moveHero(Arena arena , long currentTime) {
+        updateFreezeState(currentTime);
         if(isFrozen) return;
-        this.jump(System.currentTimeMillis());
+        this.jump(currentTime);
         Position heroPosition = this.getPosition();
-        arena.checkCollisions();
+        arena.checkHeroCollisions();
         if(arena.isOnElevator(this)) ready=true; else ready = false;
     }
-    public boolean isReady(){
-        return ready;
+    public void setHp(int i){
+        if(System.currentTimeMillis()-lastTimeHit<500) return ;
+        lastTimeHit=System.currentTimeMillis();
+        System.out.println("OUCH!");
+        hp+=i;
     }
-
-
+    public int getHp(){
+        return this.hp;
+    }
     public void draw(TextGraphics graphics) {
         if(isFrozen){
             graphics.setForegroundColor(TextColor.Factory.fromString("#ADD8E6"));
@@ -89,6 +95,9 @@ public class Hero extends Element {
             return;
         }
     }
+    public boolean isReady(){
+        return ready;
+    }
     public void freeze(){
         isFrozen=true;
         freezeStart= System.currentTimeMillis();
@@ -97,9 +106,5 @@ public class Hero extends Element {
         if (isFrozen && currentTime - freezeStart > 2000) {
             isFrozen = false;
         }
-    }
-    public void setHp(int i){
-        System.out.println("OUCH!");
-        hp+=i;
     }
 }

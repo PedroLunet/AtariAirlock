@@ -47,17 +47,25 @@ public class Game {
                 processKey(key);
             }
             Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps // while+lento
+            long currentTime=System.currentTimeMillis();
             if (gameStarted) {
-                long timePassed = (System.currentTimeMillis() - startingTime) / 1000;
+                long timePassed = (currentTime - startingTime) / 1000;
                 timeLeft = 50 - timePassed;
-                if(timeLeft == 0 ){screen.close();System.out.println("Game Over"); break;}
-                arena.hero.moveHero(arena);
+                if(timeLeft == 0 ){
+                    screen.close();
+                    System.out.println("GAME OVER !");
+                    break;}
+                if(arena.getLevel()==4){
+                    screen.close();
+                    System.out.println("YOU ESCAPED ! ");
+                    System.out.println("You did so in "+ (50-timeLeft)+ " seconds with a score of "+ arena.getScore() +" !" );
+                }
+                arena.hero.moveHero(arena,currentTime);
                 arena.moveMonsters();
                 arena.startElevator();
-                arena.checkForMonsters();
+                arena.activateShootingM();
                 arena.moveBullets();
-                arena.checkCollisions();
-                arena.hero.updateFreezeState(System.currentTimeMillis());
+                arena.checkHeroCollisions();
             }
         }
     }

@@ -24,7 +24,6 @@ public class Bullet extends Element {
             position.setX(position.getX() + direction);
             Position newp= new Position(position.getX() + direction,this.getPosition().getY());
             if(arena.checkWalls(newp)) toRemove = true;
-            if(arena.checkBulletCollision(arena.hero)) toRemove=true;
             lastTimeMoved = currentTime;
         }
         return toRemove;

@@ -12,6 +12,7 @@ public class Arena {
     private int height;
     public Hero hero;
     private int score = 0;
+    private int level = 0;
     private List<Wall> walls;
     private List<Floor> floors;
     private List<Coin> coins;
@@ -21,7 +22,6 @@ public class Arena {
     protected List<Key> keys = createKeys();
     private int elevatorKeysC = 0;
     private int wallKeysC = 0;
-    private boolean lastKeyType;
     private List<Elevator> elevators = createElevators();
     private Elevator lastElevator = elevators.get(0);
     private int bottomD = 3;
@@ -141,8 +141,10 @@ public class Arena {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
-        graphics.putString(new TerminalPosition(70, 5), "Time Left= " + Game.getTime());
-        graphics.putString(new TerminalPosition(20, 5), "SCORE " + score);
+        graphics.putString(new TerminalPosition(70, 2), "Time Left= " + Game.getTime());
+        graphics.putString(new TerminalPosition(70, 4), "SCORE " + score);
+        graphics.putString(new TerminalPosition(70, 6), "LEVEL " + level);
+        graphics.putString(new TerminalPosition(20, 2), "HP  " + hero.getHp());
         for (Wall wall : walls) {
             wall.draw(graphics);
         }
@@ -153,7 +155,6 @@ public class Arena {
         for (Monster monster : monsters) {
             monster.draw(graphics);
         }
-        if(this.checkBulletCollision(hero)){hero.draw(graphics);};
         hero.draw(graphics);
         for (Key key : keys) {
             key.draw(graphics);
@@ -168,39 +169,27 @@ public class Arena {
             coin.draw(graphics);
         }
     }
-    public void checkCollisions(){
+    public void checkHeroCollisions(){
         if (checkMonsterCollision(hero.getPosition())) {
             hero.setHp(-20);
         }
         if (checkCoinCollision(hero.getPosition())) {
-            removeCoin();
+            score++;
         }
         if(checkKeyCollision(hero)){
             System.out.println("GOT A KEY");
         }
         if(checkBulletCollision(hero)) {
-            hero.setHp(-20);
+            hero.setHp(-10);
             hero.freeze();
-            System.out.println("got shot");
         }
     }
-
-
-    public void removeCoin() {
+    public boolean checkCoinCollision(Position heroPosition) {
         Iterator<Coin> coinIterator = coins.iterator();
         while (coinIterator.hasNext()) {
             Coin coin = coinIterator.next();
             if (hero.getPosition().samePosition(coin.getPosition())) {
                 coinIterator.remove();
-            }
-        }
-    }
-
-
-    public boolean checkCoinCollision(Position heroPosition) {
-        for (Coin coin : coins) {
-            Position coinPosition = coin.getPosition();
-            if (heroPosition.samePosition(coinPosition)) {
                 return true;
             }
         }
@@ -225,24 +214,25 @@ public class Arena {
         return false; // Se nao tiver colisão
     }
     public boolean checkKeyCollision(Hero hero) {
-        Position heroP = hero.getPosition();
-        for (Key key : keys) {
-            Position keyP = key.getPosition();
-            if (heroP.samePosition(keyP)) {
-                lastKeyType = key.getType();
-                collectKeys();
-                keys.remove(key);
+        Iterator<Key> keysIterator = keys.iterator();
+        while (keysIterator.hasNext()) {
+            Key key = keysIterator.next();
+            if (hero.getPosition().samePosition(key.getPosition())) {
+                collectKeys(key);
+                keysIterator.remove();
                 return true;
             }
         }
         return false;
     }
     public boolean checkBulletCollision(Hero hero){
-        for(Bullet b : bullets){
-            Position bpos =b.getPosition();
-            System.out.println("Bullet at-"+ bpos);
-            System.out.println("Hero at-"+ hero.getPosition());
-            if(bpos.samePosition(hero.getPosition())) return true;
+        Iterator<Bullet> bulletsIterator = bullets.iterator();
+        while (bulletsIterator.hasNext()) {
+            Bullet bullet = bulletsIterator.next();
+            if (hero.getPosition().samePosition(bullet.getPosition())) {
+               bulletsIterator.remove();
+               return true;
+            }
         }
         return false;
     }
@@ -304,7 +294,8 @@ public class Arena {
         }
         return false;
     }
-    public void collectKeys() {
+    public void collectKeys(Key key) {
+        boolean lastKeyType = key.getType();
         if (!lastKeyType) {
             elevators.get(elevatorKeysC).activateElevator();
             lastElevator = elevators.get(elevatorKeysC);
@@ -315,10 +306,10 @@ public class Arena {
     public void startElevator() {
         if (hero.isReady() && lastElevator.getActiveStatus()) {
             lastElevator.runElevator(hero);
-            score++;
+            level++;
         }
     }
-    public void checkForMonsters(){
+    public void activateShootingM(){
         for(Monster m : monsters){
            m.action(this, hero);
         }
@@ -326,5 +317,11 @@ public class Arena {
     public void moveBullets() {
         if (bullets.isEmpty()) return;
         bullets.removeIf(bullet -> bullet.move(this));
+    }
+    public int getScore(){
+        return score;
+    }
+    public int getLevel(){
+        return level;
     }
 }
