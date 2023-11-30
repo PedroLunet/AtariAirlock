@@ -9,7 +9,6 @@ public class Elevator {
     private Position startingP;
     private Position endingP;
     private boolean isActivated = false;
-    private int isWorking = 0;
     public Elevator(Position start , Position end){
         this.startingP = start;
         this.endingP = end;
@@ -32,6 +31,7 @@ public class Elevator {
     }
     public void runElevator(Hero hero){
         isActivated=false;
+        int isWorking = 0;
         int elevatorHeight=3;
         ArrayList<Position> startingP = elevator;
         int startingY = startingP.get(0).getY();

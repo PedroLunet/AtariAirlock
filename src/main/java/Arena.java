@@ -66,6 +66,10 @@ public class Arena {
         for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
             walls.add(new Wall(mirroredX, y));
         }
+        for (int i = 0; i < 3; i++) {
+            int y = 24 - i;
+            walls.add(new Wall(76, y));
+        }
         return walls;
     }
 
@@ -77,24 +81,23 @@ public class Arena {
             int y = startY - i;
             doors.add(new Door(23, y));
         }
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(76, y));
-        }
         startY = 20;
         for (int i = 0; i < 3; i++) {
             int y = startY - i;
             doors.add(new Door(23, y));
         }
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(76, y));
-        }
+
         startY = 16;
         for (int i = 0; i < 3; i++) {
             int y = startY - i;
             doors.add(new Door(23, y));
         }
+        startY = 20;
+        for (int i = 0; i < 3; i++) {
+            int y = startY - i;
+            doors.add(new Door(76, y));
+        }
+        startY = 16;
         for (int i = 0; i < 3; i++) {
             int y = startY - i;
             doors.add(new Door(76, y));
@@ -278,18 +281,17 @@ public class Arena {
         return false;
     }
 
-
     private void removeDoor(int y) {
-
-        if (y == 22){
-            for (int i = 0; i < 3; i++) {
-                doors.remove(0);
-            }
-            for (int i = 0; i < 3; i++) {
-                doors.remove(3);
+        Iterator<Door> doorIterator = doors.iterator();
+        while (doorIterator.hasNext()) {
+            Door door = doorIterator.next();
+            int doorY = door.getPosition().getY();
+            if (doorY >= y && doorY <= y + 3) {
+                doorIterator.remove();
             }
         }
     }
+
 
 
     public List<Monster> createMonsters () {
