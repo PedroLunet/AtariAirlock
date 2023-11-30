@@ -32,7 +32,7 @@ public class Elevator {
     }
     public void runElevator(Hero hero){
         isActivated=false;
-        int elevatorHeight=4;
+        int elevatorHeight=3;
         ArrayList<Position> startingP = elevator;
         int startingY = startingP.get(0).getY();
         int newY=startingY-1;

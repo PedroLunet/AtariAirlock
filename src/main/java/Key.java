@@ -14,7 +14,7 @@ public class Key extends Element{
     public Position getPosition(){
         return position;
     }
-    public boolean getType(){return keyType;} //Vai dar jeito na implementacao das key collisions
+    //public boolean getType(){return keyType;} //Vai dar jeito na implementacao das key collisions
 
     @Override
     public void draw(TextGraphics graphics) {
