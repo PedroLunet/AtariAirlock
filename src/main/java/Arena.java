@@ -110,9 +110,6 @@ public class Arena {
         }
         return doors;
     }
-
-
-
     public List<Coin> createCoins() {
         List<Coin> coins = new ArrayList<>();
         Random random = new Random();
@@ -281,14 +278,15 @@ public class Arena {
         return false;
     }
 
-    private void removeDoorAtLevel(int levelY) {
-        Iterator<Door> doorIterator = doors.iterator();
 
-        while (doorIterator.hasNext()) {
-            Door door = doorIterator.next();
+    private void removeDoor(int y) {
 
-            if (door.getPosition().getY() == levelY) {
-                doorIterator.remove();
+        if (y == 22){
+            for (int i = 0; i < 3; i++) {
+                doors.remove(0);
+            }
+            for (int i = 0; i < 3; i++) {
+                doors.remove(3);
             }
         }
     }
