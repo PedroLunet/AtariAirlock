@@ -20,7 +20,7 @@ public class NormalMonster extends Monster {
             int newX = getPosition().getX() + direction;
             Position newPosition = new Position(newX, getPosition().getY());
 
-            if (!arena.checkWalls(newPosition)) {
+            if (!arena.checkAllWalls(newPosition)) {
                 setPosition(newPosition);
                 moved = true;
                 lastTimeMoved = System.currentTimeMillis();

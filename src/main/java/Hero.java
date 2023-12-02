@@ -8,6 +8,7 @@ public class Hero extends Element {
         super(x, y);
     }
     private int hp=100;
+    private boolean canMove = true;
     private int isJumping = 0;
     private long jumpStart;
     private boolean ready=false;
@@ -19,10 +20,7 @@ public class Hero extends Element {
         int newX = position.getX() + 1;
         Position newPosition = new Position(newX, position.getY());
 
-        if (!arena.checkWalls(newPosition)) {
-            setPosition(new Position(newX, position.getY()));
-        }
-        if (!arena.checkDoors(newPosition)) {
+        if (!arena.checkAllWalls(newPosition)) {
             setPosition(new Position(newX, position.getY()));
         }
     }
@@ -31,17 +29,14 @@ public class Hero extends Element {
         int newX = position.getX() - 1;
         Position newPosition = new Position(newX, position.getY());
 
-        if (!arena.checkWalls(newPosition)) {
-            setPosition(new Position(newX, position.getY()));
-        }
-        if (!arena.checkDoors(newPosition)) {
+        if (!arena.checkAllWalls(newPosition)) {
             setPosition(new Position(newX, position.getY()));
         }
     }
     public void moveHero(Arena arena , long currentTime) {
         updateFreezeState(currentTime);
         if(isFrozen) return;
-        this.jump(currentTime);
+        this.jump(arena, currentTime);
         Position heroPosition = this.getPosition();
         arena.checkHeroCollisions();
         if(arena.isOnElevator(this)) ready=true; else ready = false;
@@ -70,7 +65,7 @@ public class Hero extends Element {
         isJumping=1;
         jumpStart = System.currentTimeMillis();
     }
-    public void jump(long currentTime) {
+    public void jump(Arena arena ,long currentTime) {
         int jumpHeight = 1; //for now
         long dt = currentTime - jumpStart;
         Position startingP = getPosition();
@@ -78,25 +73,29 @@ public class Hero extends Element {
         if (isJumping == 0) return;
         if (isJumping == 1) {
             int newY = startingP.getY() - jumpHeight;
-            setPosition(new Position(startingP.getX(), newY));
+            Position newp = new Position(startingP.getX(), newY);
+            if(!arena.checkAllWalls(newp)){setPosition(newp);}
             isJumping = 2;
             return;
         }
         if (isJumping == 2 && dt > 100*speed) {
             int newY = startingP.getY() - jumpHeight;
-            setPosition(new Position(startingP.getX(), newY));
+            Position newp = new Position(startingP.getX(), newY);
+            if(!arena.checkAllWalls(newp)){setPosition(newp);}
             isJumping = 3;
             return;
         }
         if (isJumping == 3 && dt > 200*speed) {
             int newY = startingP.getY() + jumpHeight;
-            setPosition(new Position(startingP.getX(), newY));
+            Position newp = new Position(startingP.getX(), newY);
+            if(!arena.checkAllWalls(newp)){setPosition(newp);}
             isJumping = 4;
             return;
         }
         if (isJumping == 4 && dt > 300*speed) {
             int newY = startingP.getY() + jumpHeight;
-            setPosition(new Position(startingP.getX(), newY));
+            Position newp = new Position(startingP.getX(), newY);
+            if(!arena.checkAllWalls(newp)){setPosition(newp);}
             isJumping = 0;
             return;
         }

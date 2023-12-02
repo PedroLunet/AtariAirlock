@@ -23,7 +23,7 @@ public class Bullet extends Element {
         if (currentTime - lastTimeMoved > speed) {
             position.setX(position.getX() + direction);
             Position newp= new Position(position.getX() + direction,this.getPosition().getY());
-            if(arena.checkWalls(newp)) toRemove = true;
+            if(arena.checkAllWalls(newp)) toRemove = true;
             lastTimeMoved = currentTime;
         }
         return toRemove;

@@ -13,16 +13,17 @@ public class Arena {
     public Hero hero;
     private int score = 0;
     private int level = 0;
-    private List<Wall> walls;
+    private List<NormalWall> walls;
     private List<Door> doors;
+    private List<Wall> allWalls = new ArrayList<>();
     private List<Floor> floors;
     private List<Coin> coins;
-    private List<Integer> normalMonsterspLevel = Arrays.asList(1, 2, 2, 3);
+    private List<Integer> normalMonsterspLevel = Arrays.asList(2, 3, 4, 4);
     private List<Integer> shootingMonsterspLevel = Arrays.asList(1,1,1,1);
+    private List<Integer> yLevels = Arrays.asList(24,20,16,12);
     private List<Monster> monsters = createMonsters();
     protected List<Key> keys = createKeys();
-    private int elevatorKeysC = 0;
-    private int wallKeysC = 0;
+    private int elevatorKeysCount = 0;
     private List<Elevator> elevators = createElevators();
     private Elevator lastElevator = elevators.get(0);
     private int bottomD = 3;
@@ -34,7 +35,7 @@ public class Arena {
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        hero = new Hero(25, 24);
+        hero = new Hero(78, 24);
         walls = createWalls();
         floors = createFloors();
         coins = createCoins();
@@ -51,66 +52,32 @@ public class Arena {
         }
     }
 
-    public List<Wall> createWalls() {
-        List<Wall> walls = new ArrayList<>();
+    public List<NormalWall> createWalls() {
+        List<NormalWall> walls = new ArrayList<>();
 
         int lowestFloorY = height - bottomD;
         int highestFloorY = lowestFloorY - (floorSep * 3);
 
         for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
-            walls.add(new Wall(sideD, y));
+            walls.add(new NormalWall(sideD, y));
         }
 
         int mirroredX = width - sideD - 1; // Calculate mirrored X position
 
         for (int y = highestFloorY - 4; y <= lowestFloorY; y++) {
-            walls.add(new Wall(mirroredX, y));
+            walls.add(new NormalWall(mirroredX, y));
         }
-        for (int i = 0; i < 3; i++) {
-            int y = 24 - i;
-            walls.add(new Wall(76, y));
-        }
+        allWalls.addAll(walls);
         return walls;
     }
 
     public List<Door> createDoors() {
         List<Door> doors = new ArrayList<>();
-        int startY = 24;
-
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(23, y));
+        for(int j : yLevels) {
+            doors.add(new Door(23, j));
+            doors.add(new Door(76, j));
         }
-        startY = 20;
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(23, y));
-        }
-
-        startY = 16;
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(23, y));
-        }
-        startY = 20;
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(76, y));
-        }
-        startY = 16;
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(76, y));
-        }
-        startY = 12;
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(23, y));
-        }
-        for (int i = 0; i < 3; i++) {
-            int y = startY - i;
-            doors.add(new Door(76, y));
-        }
+        allWalls.addAll(doors);
         return doors;
     }
     public List<Coin> createCoins() {
@@ -201,7 +168,7 @@ public class Arena {
         for (Coin coin : coins) {
             coin.draw(graphics);
         }
-        for (Door door : doors) {
+        for(Door door : doors) {
             door.draw(graphics);
         }
     }
@@ -232,17 +199,9 @@ public class Arena {
         return false;
     }
 
-    public boolean checkWalls(Position p){
-        for (Wall wall : walls) {
+    public boolean checkAllWalls(Position p){ //A FUNCAO TEM DE FICAR ASSIM PARA AS PORTAS DESAPARECEREM
+        for(Wall wall : allWalls){
             if(p.samePosition(wall.getPosition())){
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean checkDoors(Position p){
-        for (Door door : doors) {
-            if(p.samePosition(door.getPosition())){
                 return true;
             }
         }
@@ -281,25 +240,24 @@ public class Arena {
         return false;
     }
 
-    private void removeDoor(int y) {
-        Iterator<Door> doorIterator = doors.iterator();
-        while (doorIterator.hasNext()) {
-            Door door = doorIterator.next();
-            int doorY = door.getPosition().getY();
-            if (doorY >= y && doorY <= y + 3) {
-                doorIterator.remove();
-            }
+    public void removeDoor(int i) {
+        if(i+1==yLevels.size()) doors.remove(0);
+        else if(i%2!=0) {
+            doors.remove(0);
+            doors.remove(1);
+        }
+        else {
+            doors.remove(0);
+            doors.remove(0);
         }
     }
-
-
 
     public List<Monster> createMonsters () {
         int min = 24;
         int max = 75;
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
-        monsters.add(new ShootingMonster(65, 24));
+        monsters.add(new NormalMonster(65, 24));
         for (int j = 1; j < normalMonsterspLevel.size(); j++) {
             for (int i = 0; i < normalMonsterspLevel.get(j); i++) {
                 int ri = random.nextInt(max - min + 1) + min;
@@ -348,13 +306,9 @@ public class Arena {
         return false;
     }
     public void collectKeys(Key key) {
-        boolean lastKeyType = key.getType();
-        if (!lastKeyType) {
-            elevators.get(elevatorKeysC).activateElevator();
-            lastElevator = elevators.get(elevatorKeysC);
-            elevatorKeysC++;
-        }
-        //else...
+            lastElevator = elevators.get(elevatorKeysCount);
+            removeDoor(elevatorKeysCount);
+            elevatorKeysCount++;
     }
     public void startElevator() {
         if (hero.isReady()) {
@@ -376,5 +330,8 @@ public class Arena {
     }
     public int getLevel(){
         return level;
+    }
+    public List<Door> getDoors(){
+        return doors;
     }
 }
