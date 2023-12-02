@@ -233,4 +233,8 @@ public class Arena {
             score++;
         }
     }
+
+    public int getScore() {
+        return 0;
+    }
 }
