@@ -38,7 +38,7 @@ public class Arena {
         hero = new Hero(78, 24);
         walls = createWalls();
         floors = createFloors();
-        coins = createCoins();
+        coins = createCoins(keys);
         doors = createDoors();
     }
 
@@ -89,7 +89,23 @@ public class Arena {
         allWalls.addAll(doors);
         return doors;
     }
-    public List<Coin> createCoins() {
+
+    public List<Key> createKeys () {
+        int min = 24;
+        int max = 75;
+        Random random = new Random();
+        ArrayList<Key> keys = new ArrayList<>();
+        for(int i = 22 ; i > 11 ; i = i - 4){
+            int r1 = random.nextInt(max - min + 1) + min;
+            int r2 = random.nextInt(max - min + 1) + min;
+            keys.add(new Key(r1, i));
+            keys.add(new Key(r2, i));
+        }
+        int r1 = random.nextInt(max - min + 1) + min;
+        keys.add(new Key(r1, 10));
+        return keys;
+    }
+    public List<Coin> createCoins(List<Key> keys) {
         List<Coin> coins = new ArrayList<>();
         Random random = new Random();
         int numCoins1 = random.nextInt(5) + 1;
@@ -101,21 +117,42 @@ public class Arena {
 
         for (int i = 0; i < numCoins1; i++) {
             int x = random.nextInt((maxX - minX) + 1) + minX;
-            coins.add(new Coin(x, 22));
+
+            // Check if there is no key at position (x, 22) before adding a coin
+            if (!keyExistsAtPosition(keys, x, 22)) {
+                coins.add(new Coin(x, 22));
+            }
         }
+
         for (int i = 0; i < numCoins2; i++) {
             int x = random.nextInt((maxX - minX) + 1) + minX;
             coins.add(new Coin(x, 18));
         }
+
         for (int i = 0; i < numCoins3; i++) {
             int x = random.nextInt((maxX - minX) + 1) + minX;
             coins.add(new Coin(x, 14));
         }
+
         for (int i = 0; i < numCoins4; i++) {
             int x = random.nextInt((maxX - minX) + 1) + minX;
-            coins.add(new Coin(x, 10));
+
+            // Check if there is no key at position (x, 10) before adding a coin
+            if (!keyExistsAtPosition(keys, x, 10)) {
+                coins.add(new Coin(x, 10));
+            }
         }
+
         return coins;
+    }
+
+    private boolean keyExistsAtPosition(List<Key> keys, int x, int y) {
+        for (Key key : keys) {
+            if (key.getPosition().getX() == x && key.getPosition().getY() == y) {
+                return true; // Key already exists at this position
+            }
+        }
+        return false; // No key found at this position
     }
 
 
@@ -277,21 +314,7 @@ public class Arena {
             monster.move(this);
         }
     }
-    public List<Key> createKeys () {
-        int min = 24;
-        int max = 75;
-        Random random = new Random();
-        ArrayList<Key> keys = new ArrayList<>();
-        for(int i = 22 ; i > 11 ; i = i - 4){
-            int r1 = random.nextInt(max - min + 1) + min;
-            int r2 = random.nextInt(max - min + 1) + min;
-            keys.add(new Key(r1, i));
-            keys.add(new Key(r2, i));
-        }
-        int r1 = random.nextInt(max - min + 1) + min;
-        keys.add(new Key(r1, 10));
-        return keys;
-    }
+
     public List<Elevator> createElevators () {
         ArrayList<Elevator> elevators = new ArrayList<>();
         elevators.add((new Elevator(new Position(16, 25), new Position(22, 25))));
