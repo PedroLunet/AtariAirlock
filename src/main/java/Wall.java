@@ -17,4 +17,8 @@ public abstract class Wall extends Element{
         int y = position.getY();
         graphics.setCharacter(new TerminalPosition(x,y), '\u2588');
     }
+
+    public boolean checkColision (Position p) {
+        return p.samePosition(this.getPosition());
+    }
 }

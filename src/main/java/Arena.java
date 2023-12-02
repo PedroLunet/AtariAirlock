@@ -73,9 +73,18 @@ public class Arena {
 
     public List<Door> createDoors() {
         List<Door> doors = new ArrayList<>();
+        int signal=1;
+        //doors.add(new Door(76,24));
         for(int j : yLevels) {
-            doors.add(new Door(23, j));
-            doors.add(new Door(76, j));
+            if(signal==1) {
+                doors.add(new Door(76, j));
+                doors.add(new Door(23, j));
+            }
+            if(signal==-1){
+                doors.add(new Door(23, j));
+                doors.add(new Door(76, j));
+            }
+            signal*=-1;
         }
         allWalls.addAll(doors);
         return doors;
@@ -126,6 +135,7 @@ public class Arena {
             floors.addAll(createSingleFloor(floorX, middleFloorY, floorLength));
             middleFloorY -= floorSep;
         }
+        allWalls.addAll(floors);
         return floors;
     }
 
@@ -155,7 +165,6 @@ public class Arena {
         for (Monster monster : monsters) {
             monster.draw(graphics);
         }
-        hero.draw(graphics);
         for (Key key : keys) {
             key.draw(graphics);
         }
@@ -171,6 +180,7 @@ public class Arena {
         for(Door door : doors) {
             door.draw(graphics);
         }
+        hero.draw(graphics);
     }
     public void checkHeroCollisions(){
         if (checkMonsterCollision(hero.getPosition())) {
@@ -201,7 +211,7 @@ public class Arena {
 
     public boolean checkAllWalls(Position p){ //A FUNCAO TEM DE FICAR ASSIM PARA AS PORTAS DESAPARECEREM
         for(Wall wall : allWalls){
-            if(p.samePosition(wall.getPosition())){
+            if(wall.checkColision(p)) {
                 return true;
             }
         }
@@ -240,16 +250,8 @@ public class Arena {
         return false;
     }
 
-    public void removeDoor(int i) {
-        if(i+1==yLevels.size()) doors.remove(0);
-        else if(i%2!=0) {
-            doors.remove(0);
-            doors.remove(1);
-        }
-        else {
-            doors.remove(0);
-            doors.remove(0);
-        }
+    public void openDoor(int i) {
+        doors.get(i+1).setOpen(true);
     }
 
     public List<Monster> createMonsters () {
@@ -280,10 +282,14 @@ public class Arena {
         int max = 75;
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
-        for(int i = 22 ; i > 7 ; i = i - 4){
-            int ri = random.nextInt(max - min + 1) + min;
-            keys.add(new Key(ri, i));
+        for(int i = 22 ; i > 11 ; i = i - 4){
+            int r1 = random.nextInt(max - min + 1) + min;
+            int r2 = random.nextInt(max - min + 1) + min;
+            keys.add(new Key(r1, i));
+            keys.add(new Key(r2, i));
         }
+        int r1 = random.nextInt(max - min + 1) + min;
+        keys.add(new Key(r1, 10));
         return keys;
     }
     public List<Elevator> createElevators () {
@@ -306,8 +312,8 @@ public class Arena {
         return false;
     }
     public void collectKeys(Key key) {
-            lastElevator = elevators.get(elevatorKeysCount);
-            removeDoor(elevatorKeysCount);
+            lastElevator = elevators.get(elevatorKeysCount/2);
+            openDoor(elevatorKeysCount);
             elevatorKeysCount++;
     }
     public void startElevator() {

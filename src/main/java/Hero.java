@@ -28,7 +28,6 @@ public class Hero extends Element {
         if(isFrozen) return;
         int newX = position.getX() - 1;
         Position newPosition = new Position(newX, position.getY());
-
         if (!arena.checkAllWalls(newPosition)) {
             setPosition(new Position(newX, position.getY()));
         }
@@ -73,29 +72,25 @@ public class Hero extends Element {
         if (isJumping == 0) return;
         if (isJumping == 1) {
             int newY = startingP.getY() - jumpHeight;
-            Position newp = new Position(startingP.getX(), newY);
-            if(!arena.checkAllWalls(newp)){setPosition(newp);}
+            this.setPosition(new Position(startingP.getX(), newY));
             isJumping = 2;
             return;
         }
         if (isJumping == 2 && dt > 100*speed) {
             int newY = startingP.getY() - jumpHeight;
-            Position newp = new Position(startingP.getX(), newY);
-            if(!arena.checkAllWalls(newp)){setPosition(newp);}
+            this.setPosition(new Position(startingP.getX(), newY));
             isJumping = 3;
             return;
         }
         if (isJumping == 3 && dt > 200*speed) {
             int newY = startingP.getY() + jumpHeight;
-            Position newp = new Position(startingP.getX(), newY);
-            if(!arena.checkAllWalls(newp)){setPosition(newp);}
+            this.setPosition(new Position(startingP.getX(), newY));
             isJumping = 4;
             return;
         }
         if (isJumping == 4 && dt > 300*speed) {
             int newY = startingP.getY() + jumpHeight;
-            Position newp = new Position(startingP.getX(), newY);
-            if(!arena.checkAllWalls(newp)){setPosition(newp);}
+            this.setPosition(new Position(startingP.getX(), newY));
             isJumping = 0;
             return;
         }

@@ -51,7 +51,7 @@ public class Game {
             long currentTime=System.currentTimeMillis();
             if (gameStarted) {
                 if(!openArena) {
-                    arena.getDoors().remove(1);
+                    arena.getDoors().get(0).setOpen(true);
                     openArena = true;
                 }
                 long timePassed = (currentTime - startingTime) / 1000;
