@@ -11,8 +11,9 @@ import java.util.Scanner;
 public class Game {
     private final TerminalScreen screen;
     private Arena arena;
-    private static long timeLeft=50;
+    private static long timeLeft=60;
     private Leaderboard leaderboard;
+    private static boolean gameStarted=false;
 
     public Game(int width, int height) throws IOException {
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(width, height)).createTerminal();
@@ -30,16 +31,18 @@ public class Game {
         screen.refresh();
     }
     public void run() throws IOException, InterruptedException {
-        boolean gameStarted = false;
         boolean openArena = false;
         long startingTime = 0;
         String playerName = "";
+        int levelsFlooded = 0;
+        long lastUpdated = 0;
         while (playerName.isEmpty()) {
             System.out.println("Please enter your name: ");
             Scanner scanner = new Scanner(System.in);
             playerName = scanner.nextLine();
         }
         while (true) {
+            draw();
             KeyStroke key = screen.pollInput(); //Em vez de esperar por input o while corre sempre poll != read
             if (key != null) {
                 if (!gameStarted) startingTime = System.currentTimeMillis();
@@ -70,14 +73,17 @@ public class Game {
                     openArena = true;
                 }
                 long timePassed = (currentTime - startingTime) / 1000;
-                timeLeft = 50 - timePassed;
+                timeLeft = 60 - timePassed;
+                if(timeLeft%15 == 0 && timeLeft!=60 && System.currentTimeMillis()>=lastUpdated+15000){
+                    lastUpdated=System.currentTimeMillis();
+                    arena.setFloodLevels(levelsFlooded);
+                    checkDrown(levelsFlooded);
+                    levelsFlooded++;
+                }
                 if(timeLeft == 0 ){
                     screen.close();
                     System.out.println("GAME OVER !");
                     break;}
-                if(timeLeft == 45){
-                    arena.fillWater(0, screen.newTextGraphics());
-                }
                 if(arena.getLevel()==4){
                     screen.close();
                     System.out.println("YOU ESCAPED ! ");
@@ -90,9 +96,8 @@ public class Game {
                 arena.moveBullets();
                 arena.checkHeroCollisions();
             }
-            draw();
             Player player = new Player(playerName, arena.getScore());
-            System.out.println("Player: " + player.getName() + " - Score: " + player.getScore());
+            //System.out.println("Player: " + player.getName() + " - Score: " + player.getScore());
         }
 
         leaderboard.showLeaderboard(); // Mostrar a leaderboard ao final do jogo
@@ -101,5 +106,14 @@ public class Game {
     public static long getTime(){ return timeLeft;}
     private void processKey(KeyStroke key) {
         arena.processKey(key);
+    }
+    private boolean checkDrown(int levels ) throws IOException {
+        if(arena.getLevel()==levels){
+            System.out.println("YOU DROWNED");
+            screen.close();
+            return true;
+        }
+        return false;
+
     }
 }

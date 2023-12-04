@@ -32,6 +32,7 @@ public class Arena {
     private int floorSep = 4;
     private int elevatorW = 8;
     public List<Bullet> bullets = new ArrayList<>();
+    private int levelsFlooded = -1;
 
     public Arena(int width, int height) {
         this.width = width;
@@ -194,8 +195,8 @@ public class Arena {
         graphics.putString(new TerminalPosition(70, 4), "SCORE " + score);
         graphics.putString(new TerminalPosition(70, 6), "LEVEL " + level);
         graphics.putString(new TerminalPosition(20, 2), "HP  " + hero.getHp());
-        if(Game.getTime()<=45){
-            fillWater(0,graphics);
+        for(int i = 0 ; i<=levelsFlooded ; i++){
+            fillWater(i,graphics);
         }
         for (Wall wall : walls) {
             wall.draw(graphics);
@@ -357,6 +358,7 @@ public class Arena {
         if (hero.isReady()) {
             lastElevator.runElevator(hero);
             level++;
+            if(keys.size()%2 == 0) System.out.println("YOU LOST");
         }
     }
 
@@ -396,4 +398,5 @@ public class Arena {
     public List<Door> getDoors(){
         return doors;
     }
+    public void setFloodLevels(int i){levelsFlooded=i;}
 }
