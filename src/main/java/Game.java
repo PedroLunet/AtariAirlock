@@ -40,7 +40,6 @@ public class Game {
             playerName = scanner.nextLine();
         }
         while (true) {
-            draw();
             KeyStroke key = screen.pollInput(); //Em vez de esperar por input o while corre sempre poll != read
             if (key != null) {
                 if (!gameStarted) startingTime = System.currentTimeMillis();
@@ -76,6 +75,9 @@ public class Game {
                     screen.close();
                     System.out.println("GAME OVER !");
                     break;}
+                if(timeLeft == 45){
+                    arena.fillWater(0, screen.newTextGraphics());
+                }
                 if(arena.getLevel()==4){
                     screen.close();
                     System.out.println("YOU ESCAPED ! ");
@@ -88,6 +90,7 @@ public class Game {
                 arena.moveBullets();
                 arena.checkHeroCollisions();
             }
+            draw();
             Player player = new Player(playerName, arena.getScore());
             System.out.println("Player: " + player.getName() + " - Score: " + player.getScore());
         }

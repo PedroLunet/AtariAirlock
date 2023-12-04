@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.screen.TerminalScreen;
 
 import java.util.*;
 
@@ -11,16 +12,16 @@ public class Arena {
     private int width;
     private int height;
     public Hero hero;
-    private int score = 0;
+    protected int score = 0;
     private int level = 0;
     private List<NormalWall> walls;
     private List<Door> doors;
     private List<Wall> allWalls = new ArrayList<>();
     private List<Floor> floors;
-    private List<Coin> coins;
+    protected List<Coin> coins;
     private List<Integer> normalMonsterspLevel = Arrays.asList(2, 3, 4, 4);
-    private List<Integer> shootingMonsterspLevel = Arrays.asList(1,1,1,1);
-    private List<Integer> yLevels = Arrays.asList(24,20,16,12);
+    private List<Integer> shootingMonsterspLevel = Arrays.asList(1, 1, 1, 1);
+    private List<Integer> yLevels = Arrays.asList(24, 20, 16, 12);
     private List<Monster> monsters = createMonsters();
     protected List<Key> keys = createKeys();
     private int elevatorKeysCount = 0;
@@ -73,29 +74,29 @@ public class Arena {
 
     public List<Door> createDoors() {
         List<Door> doors = new ArrayList<>();
-        int signal=1;
+        int signal = 1;
         //doors.add(new Door(76,24));
-        for(int j : yLevels) {
-            if(signal==1) {
+        for (int j : yLevels) {
+            if (signal == 1) {
                 doors.add(new Door(76, j));
                 doors.add(new Door(23, j));
             }
-            if(signal==-1){
+            if (signal == -1) {
                 doors.add(new Door(23, j));
                 doors.add(new Door(76, j));
             }
-            signal*=-1;
+            signal *= -1;
         }
         allWalls.addAll(doors);
         return doors;
     }
 
-    public List<Key> createKeys () {
+    public List<Key> createKeys() {
         int min = 24;
         int max = 75;
         Random random = new Random();
         ArrayList<Key> keys = new ArrayList<>();
-        for(int i = 22 ; i > 11 ; i = i - 4){
+        for (int i = 22; i > 11; i = i - 4) {
             int r1 = random.nextInt(max - min + 1) + min;
             int r2 = random.nextInt(max - min + 1) + min;
             keys.add(new Key(r1, i));
@@ -105,6 +106,7 @@ public class Arena {
         keys.add(new Key(r1, 10));
         return keys;
     }
+
     public List<Coin> createCoins(List<Key> keys) {
         List<Coin> coins = new ArrayList<>();
         Random random = new Random();
@@ -192,6 +194,9 @@ public class Arena {
         graphics.putString(new TerminalPosition(70, 4), "SCORE " + score);
         graphics.putString(new TerminalPosition(70, 6), "LEVEL " + level);
         graphics.putString(new TerminalPosition(20, 2), "HP  " + hero.getHp());
+        if(Game.getTime()<=45){
+            fillWater(0,graphics);
+        }
         for (Wall wall : walls) {
             wall.draw(graphics);
         }
@@ -208,37 +213,39 @@ public class Arena {
         for (Elevator elevator : elevators) {
             elevator.draw(graphics);
         }
-        for (Bullet bullet : bullets){
+        for (Bullet bullet : bullets) {
             bullet.draw(graphics);
         }
         for (Coin coin : coins) {
             coin.draw(graphics);
         }
-        for(Door door : doors) {
+        for (Door door : doors) {
             door.draw(graphics);
         }
         hero.draw(graphics);
     }
-    public void checkHeroCollisions(){
+
+    public void checkHeroCollisions() {
         if (checkMonsterCollision(hero.getPosition())) {
             hero.setHp(-20);
         }
         if (checkCoinCollision(hero.getPosition())) {
             score++;
         }
-        if(checkKeyCollision(hero)){
+        if (checkKeyCollision(hero)) {
             System.out.println("GOT A KEY");
         }
-        if(checkBulletCollision(hero)) {
+        if (checkBulletCollision(hero)) {
             hero.setHp(-10);
             hero.freeze();
         }
     }
+
     public boolean checkCoinCollision(Position heroPosition) {
         Iterator<Coin> coinIterator = coins.iterator();
         while (coinIterator.hasNext()) {
             Coin coin = coinIterator.next();
-            if (hero.getPosition().samePosition(coin.getPosition())) {
+            if (heroPosition.samePosition(coin.getPosition())) {
                 coinIterator.remove();
                 return true;
             }
@@ -246,14 +253,15 @@ public class Arena {
         return false;
     }
 
-    public boolean checkAllWalls(Position p){ //A FUNCAO TEM DE FICAR ASSIM PARA AS PORTAS DESAPARECEREM
-        for(Wall wall : allWalls){
-            if(wall.checkColision(p)) {
+    public boolean checkAllWalls(Position p) { //A FUNCAO TEM DE FICAR ASSIM PARA AS PORTAS DESAPARECEREM
+        for (Wall wall : allWalls) {
+            if (wall.checkColision(p)) {
                 return true;
             }
         }
         return false;
     }
+
     public boolean checkMonsterCollision(Position heroPosition) {
         for (Monster monster : monsters) {
             Position monsterPosition = monster.getPosition();
@@ -263,6 +271,7 @@ public class Arena {
         }
         return false;
     }
+
     public boolean checkKeyCollision(Hero hero) {
         Iterator<Key> keysIterator = keys.iterator();
         while (keysIterator.hasNext()) {
@@ -275,23 +284,24 @@ public class Arena {
         }
         return false;
     }
-    public boolean checkBulletCollision(Hero hero){
+
+    public boolean checkBulletCollision(Hero hero) {
         Iterator<Bullet> bulletsIterator = bullets.iterator();
         while (bulletsIterator.hasNext()) {
             Bullet bullet = bulletsIterator.next();
             if (hero.getPosition().samePosition(bullet.getPosition())) {
-               bulletsIterator.remove();
-               return true;
+                bulletsIterator.remove();
+                return true;
             }
         }
         return false;
     }
 
     public void openDoor(int i) {
-        doors.get(i+1).setOpen(true);
+        doors.get(i + 1).setOpen(true);
     }
 
-    public List<Monster> createMonsters () {
+    public List<Monster> createMonsters() {
         int min = 24;
         int max = 75;
         Random random = new Random();
@@ -309,13 +319,14 @@ public class Arena {
         }
         return monsters;
     }
-    public void moveMonsters () {
+
+    public void moveMonsters() {
         for (Monster monster : monsters) {
             monster.move(this);
         }
     }
 
-    public List<Elevator> createElevators () {
+    public List<Elevator> createElevators() {
         ArrayList<Elevator> elevators = new ArrayList<>();
         elevators.add((new Elevator(new Position(16, 25), new Position(22, 25))));
         elevators.add((new Elevator(new Position(77, 21), new Position(83, 21))));
@@ -323,37 +334,59 @@ public class Arena {
         elevators.add((new Elevator(new Position(77, 13), new Position(83, 13))));
         return elevators;
     }
-    public boolean isOnElevator (Hero hero){
+
+    public boolean isOnElevator(Position position) {
         for (Elevator e : elevators) {
             ArrayList<Integer> temp = e.getPosition();
-            int heroX = hero.getPosition().getX();
-            int heroY = hero.getPosition().getY();
-            if (heroX >= temp.get(0) && heroX <= temp.get(1) && heroY == temp.get(2) - 1) {
+            int eX = position.getX();
+            int eY = position.getY();
+            if (eX >= temp.get(0) && eX <= temp.get(1) && eY == temp.get(2) - 1) {
                 return true;
             }
         }
         return false;
     }
+
     public void collectKeys(Key key) {
-            lastElevator = elevators.get(elevatorKeysCount/2);
-            openDoor(elevatorKeysCount);
-            elevatorKeysCount++;
+        lastElevator = elevators.get(elevatorKeysCount / 2);
+        openDoor(elevatorKeysCount);
+        elevatorKeysCount++;
     }
+
     public void startElevator() {
         if (hero.isReady()) {
             lastElevator.runElevator(hero);
             level++;
         }
     }
-    public void activateShootingM(){
-        for(Monster m : monsters){
-           m.action(this, hero);
+
+    public void activateShootingM() {
+        for (Monster m : monsters) {
+            m.action(this, hero);
         }
     }
+
     public void moveBullets() {
         if (bullets.isEmpty()) return;
         bullets.removeIf(bullet -> bullet.move(this));
     }
+
+    public void fillWater(int level, TextGraphics graphics) {
+        int yCord = 24 - 4 * level;
+        int xCord = 16;
+        int endYCord = yCord - 2;
+        int endXCord = 83;
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#0000FF"));;
+
+        for (int y = yCord; y >= endYCord; y--) {
+            for (int x = xCord; x <= endXCord; x++) {
+                graphics.setCharacter(new TerminalPosition(x, y), '\u2588');
+            }
+        }
+        graphics.setForegroundColor(TextColor.ANSI.DEFAULT);
+    }
+
     public int getScore(){
         return score;
     }

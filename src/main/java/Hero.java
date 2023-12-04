@@ -38,7 +38,7 @@ public class Hero extends Element {
         this.jump(arena, currentTime);
         Position heroPosition = this.getPosition();
         arena.checkHeroCollisions();
-        if(arena.isOnElevator(this)) ready=true; else ready = false;
+        if(arena.isOnElevator(this.getPosition())) ready=true; else ready = false;
     }
     public void setHp(int i){
         if(System.currentTimeMillis()-lastTimeHit<500) return ;
