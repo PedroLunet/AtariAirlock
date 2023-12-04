@@ -19,7 +19,11 @@ public class NormalMonster extends Monster {
         while (!moved) {
             int newX = getPosition().getX() + direction;
             Position newP = new Position(newX, getPosition().getY());
-            if(!arena.checkAllWalls(new Position(newP.getX(),newP.getY()+1))) direction *=-1;
+            if(!arena.checkAllWalls(new Position(newP.getX(),newP.getY()+1))){
+                direction *=-1;
+                setPosition(new Position(newX+direction , getPosition().getY()));
+                return ;
+            }
             if (!arena.checkAllWalls(newP)) {
                 setPosition(newP);
                 moved = true;
