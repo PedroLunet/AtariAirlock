@@ -1,7 +1,7 @@
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
-public class Wall extends Element{
+public abstract class Wall extends Element{
 
 
     public Wall(int x, int y) {
@@ -16,5 +16,9 @@ public class Wall extends Element{
         int x = position.getX();
         int y = position.getY();
         graphics.setCharacter(new TerminalPosition(x,y), '\u2588');
+    }
+
+    public boolean checkColision (Position p) {
+        return p.samePosition(this.getPosition());
     }
 }

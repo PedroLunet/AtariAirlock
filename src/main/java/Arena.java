@@ -338,6 +338,9 @@ public class Arena {
         lastElevator = elevators.get(elevatorKeysCount/2);
         openDoor(elevatorKeysCount);
         elevatorKeysCount++;
+            lastElevator = elevators.get(elevatorKeysCount/2);
+            openDoor(elevatorKeysCount);
+            elevatorKeysCount++;
     }
     public void startElevator() {
         if (hero.isReady()) {
