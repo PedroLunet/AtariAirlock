@@ -19,8 +19,9 @@ public class Arena {
     private List<Wall> allWalls = new ArrayList<>();
     private List<Floor> floors;
     protected List<Coin> coins;
-    private List<Integer> normalMonsterspLevel = Arrays.asList(2, 3, 4, 4);
-    private List<Integer> shootingMonsterspLevel = Arrays.asList(1, 1, 1, 1);
+    private List<Integer> normalMonsterspLevel = Arrays.asList(2, 2, 2, 0);
+    private List<Integer> shootingMonsterspLevel = Arrays.asList(1, 1, 1, 2);
+    private List<Integer> speedMonsterspLevel =  Arrays.asList(0, 0, 1, 2);
     private List<Integer> yLevels = Arrays.asList(24, 20, 16, 12);
     private List<Monster> monsters = createMonsters();
     protected List<Key> keys = createKeys();
@@ -33,7 +34,6 @@ public class Arena {
     private int elevatorW = 8;
     public List<Bullet> bullets = new ArrayList<>();
     private int levelsFlooded = -1;
-
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
@@ -278,7 +278,7 @@ public class Arena {
         while (keysIterator.hasNext()) {
             Key key = keysIterator.next();
             if (hero.getPosition().samePosition(key.getPosition())) {
-                collectKeys(key);
+                collectKeys();
                 keysIterator.remove();
                 return true;
             }
@@ -317,6 +317,10 @@ public class Arena {
                 int ri = random.nextInt(max - min + 1) + min;
                 monsters.add(new ShootingMonster(ri, 24 - 4 * j));
             }
+            for (int i = 0; i < speedMonsterspLevel.get(j); i++) {
+                int ri = random.nextInt(max - min + 1) + min;
+                monsters.add(new SpeedMonster(ri, 24 - 4 * j));
+            }
         }
         return monsters;
     }
@@ -348,7 +352,7 @@ public class Arena {
         return false;
     }
 
-    public void collectKeys(Key key) {
+    public void collectKeys() {
         lastElevator = elevators.get(elevatorKeysCount / 2);
         openDoor(elevatorKeysCount);
         elevatorKeysCount++;
@@ -386,9 +390,8 @@ public class Arena {
                 graphics.setCharacter(new TerminalPosition(x, y), '\u2588');
             }
         }
-        graphics.setForegroundColor(TextColor.ANSI.DEFAULT);
+        graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1"));
     }
-
     public int getScore(){
         return score;
     }

@@ -89,6 +89,10 @@ public class Game {
                     System.out.println("YOU ESCAPED ! ");
                     System.out.println("You did so in "+ (50-timeLeft)+ " seconds with a score of "+ arena.getScore() +" !" );
                 }
+                if(arena.hero.getHp()<=0){
+                    screen.close();
+                    System.out.println("YOU DIED ");
+                }
                 arena.hero.moveHero(arena,currentTime);
                 arena.moveMonsters();
                 arena.startElevator();
