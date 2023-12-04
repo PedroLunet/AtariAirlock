@@ -1,9 +1,7 @@
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
-public class Floor extends Element{
-
-
+public class Floor extends Wall{
     public Floor(int x, int y) {
         super(x, y);
     }

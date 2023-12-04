@@ -9,7 +9,6 @@ public class Elevator {
     private Position startingP;
     private Position endingP;
     private boolean isActivated = false;
-    private int isWorking = 0;
     public Elevator(Position start , Position end){
         this.startingP = start;
         this.endingP = end;
@@ -30,17 +29,10 @@ public class Elevator {
         temp.add(startingP.getY());
         return temp;
     }
-    public void activateElevator(){
-        isActivated = true;
-        isWorking=1;
-        System.out.println("Got an elevator key");
-    }
-    public boolean getActiveStatus(){
-        return isActivated;
-    }
     public void runElevator(Hero hero){
         isActivated=false;
-        int elevatorHeight=4;
+        int isWorking = 0;
+        int elevatorHeight=3;
         ArrayList<Position> startingP = elevator;
         int startingY = startingP.get(0).getY();
         int newY=startingY-1;

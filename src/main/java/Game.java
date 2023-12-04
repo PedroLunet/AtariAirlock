@@ -31,6 +31,7 @@ public class Game {
     }
     public void run() throws IOException, InterruptedException {
         boolean gameStarted = false;
+        boolean openArena = false;
         long startingTime = 0;
         String playerName = "";
         while (playerName.isEmpty()) {
@@ -65,6 +66,10 @@ public class Game {
             Thread.sleep(16);//16 milliseconds == 1000ms / 60 fps // while+lento
             long currentTime=System.currentTimeMillis();
             if (gameStarted) {
+                if(!openArena) {
+                    arena.getDoors().get(0).setOpen(true);
+                    openArena = true;
+                }
                 long timePassed = (currentTime - startingTime) / 1000;
                 timeLeft = 50 - timePassed;
                 if(timeLeft == 0 ){
