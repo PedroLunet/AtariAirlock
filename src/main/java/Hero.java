@@ -57,7 +57,7 @@ public class Hero extends Element {
             graphics.setForegroundColor(TextColor.Factory.fromString("#8c2d19"));
         }
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "\u26F9");
     }
     public void startJump(){
         if(isJumping>0) return ;

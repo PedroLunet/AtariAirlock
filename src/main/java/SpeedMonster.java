@@ -4,7 +4,7 @@ public class SpeedMonster extends Monster {
     private long speed;
 
     public SpeedMonster(int x, int y) {
-        super(x,y,"R");
+        super(x,y,"\u3020");
         direction = Math.random()<0.5 ? -1 : 1 ;
         lastTimeMoved = System.currentTimeMillis() ;
     }

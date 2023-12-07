@@ -15,10 +15,10 @@ public class Door extends Wall{
         if (isOpen) return;
         int x = position.getX();
         int y = position.getY();
-        graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1"));
-        graphics.setCharacter(new TerminalPosition(x, y ), '\u2588');
-        graphics.setCharacter(new TerminalPosition(x, y-1 ), '\u2588');
-        graphics.setCharacter(new TerminalPosition(x, y-2 ), '\u2588');
+        graphics.setForegroundColor(TextColor.Factory.fromString("#b954c8"));
+        graphics.setCharacter(new TerminalPosition(x, y ), '\u2589');
+        graphics.setCharacter(new TerminalPosition(x, y-1 ), '\u2589');
+        graphics.setCharacter(new TerminalPosition(x, y-2 ), '\u2589');
 
     }
     public void setOpen(boolean open) {

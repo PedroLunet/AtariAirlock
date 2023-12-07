@@ -7,7 +7,7 @@ public class NormalMonster extends Monster {
     private long lastTimeMoved;
     private long speed;
     public NormalMonster(int x, int y) {
-        super(x,y,"M");
+        super(x,y,"\u263f");
         direction = Math.random()<0.5 ? -1 : 1 ;
         lastTimeMoved = System.currentTimeMillis() ;
         speed = 250+(long) (Math.random() * 250);
