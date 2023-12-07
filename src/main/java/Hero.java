@@ -54,7 +54,7 @@ public class Hero extends Element {
             graphics.setForegroundColor(TextColor.Factory.fromString("#ADD8E6"));
         }
         else{
-            graphics.setForegroundColor(TextColor.Factory.fromString("#CD2C0C"));
+            graphics.setForegroundColor(TextColor.Factory.fromString("#8c2d19"));
         }
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");

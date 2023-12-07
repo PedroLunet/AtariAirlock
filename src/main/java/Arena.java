@@ -190,7 +190,7 @@ public class Arena {
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        graphics.setForegroundColor(TextColor.Factory.fromString("#9D0EB1")); //Light Purple
+        graphics.setForegroundColor(TextColor.Factory.fromString("#ffdc00")); //Light Purple
         graphics.putString(new TerminalPosition(70, 2), "Time Left= " + Game.getTime());
         graphics.putString(new TerminalPosition(70, 4), "SCORE " + score);
         graphics.putString(new TerminalPosition(70, 6), "LEVEL " + level);

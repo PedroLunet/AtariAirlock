@@ -18,6 +18,6 @@ public class Coin extends Element {
         int y = position.getY();
         graphics.setForegroundColor(TextColor.Factory.fromString("#d39809"));
         graphics.enableModifiers(SGR.BOLD);
-        graphics.setCharacter(new TerminalPosition(x,y), 'O');
+        graphics.setCharacter(new TerminalPosition(x,y), 'o');
     }
 }
