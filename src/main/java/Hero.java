@@ -107,4 +107,7 @@ public class Hero extends Element {
             isFrozen = false;
         }
     }
+    public boolean isHeroFrozen() {
+        return isFrozen;
+    }
 }

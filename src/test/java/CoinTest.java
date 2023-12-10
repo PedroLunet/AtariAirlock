@@ -1,8 +1,11 @@
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq; // Importe eq do Mockito
 import static org.mockito.Mockito.*;
 
 class CoinTest {
@@ -27,6 +30,6 @@ class CoinTest {
         coin.draw(textGraphicsMock);
         verify(textGraphicsMock, times(1)).setForegroundColor(any());
         verify(textGraphicsMock, times(1)).enableModifiers(any());
-        verify(textGraphicsMock, times(1)).setCharacter(any(), any());
+        verify(textGraphicsMock, times(1)).setCharacter(any(TerminalPosition.class), eq('o')); // Verifica os argumentos corretos usando eq()
     }
 }
