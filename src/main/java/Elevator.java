@@ -1,11 +1,13 @@
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-
 import java.util.*;
 
 public class Elevator {
     private ArrayList<Position> elevator=new ArrayList<>();
+    public ArrayList<Position> getElevatorPositions() {
+        return elevator;
+    }
     private Position startingP;
     private Position endingP;
     private boolean isActivated = false;
