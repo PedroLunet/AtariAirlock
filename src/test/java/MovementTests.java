@@ -31,4 +31,7 @@ public class MovementTests {
         assertEquals(51, hero.getPosition().getX());
         assertEquals(24, hero.getPosition().getY());
     }
+    @Test
+    public void testHeroJump(){
+    }
 }

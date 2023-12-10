@@ -38,7 +38,7 @@ public class Hero extends Element {
         this.jump(arena, currentTime);
         Position heroPosition = this.getPosition();
         arena.checkHeroCollisions();
-        if(arena.isOnElevator(this)) ready=true; else ready = false;
+        if(arena.isOnElevator(this.getPosition())) ready=true; else ready = false;
     }
     public void setHp(int i){
         if(System.currentTimeMillis()-lastTimeHit<500) return ;
@@ -54,10 +54,10 @@ public class Hero extends Element {
             graphics.setForegroundColor(TextColor.Factory.fromString("#ADD8E6"));
         }
         else{
-            graphics.setForegroundColor(TextColor.Factory.fromString("#CD2C0C"));
+            graphics.setForegroundColor(TextColor.Factory.fromString("#8c2d19"));
         }
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "\u26F9");
     }
     public void startJump(){
         if(isJumping>0) return ;

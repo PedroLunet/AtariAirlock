@@ -5,7 +5,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 public class ShootingMonster extends Monster {
     private long lasTimeShot=0;
     public ShootingMonster(int x, int y) {
-        super(x,y,"S");
+        super(x,y,"\u26F9");
     }
     public void action(Arena arena ,Hero hero){
         if(hero.getPosition().getY()!=this.getPosition().getY()) return ;
