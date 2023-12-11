@@ -68,7 +68,7 @@ public class Hero extends Element {
         int jumpHeight = 1; //for now
         long dt = currentTime - jumpStart;
         Position startingP = getPosition();
-        int speed = 1;
+        int speed = 2;
         if (isJumping == 0) return;
         if (isJumping == 1) {
             int newY = startingP.getY() - jumpHeight;
