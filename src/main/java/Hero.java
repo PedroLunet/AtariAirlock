@@ -68,7 +68,7 @@ public class Hero extends Element {
         int jumpHeight = 1; //for now
         long dt = currentTime - jumpStart;
         Position startingP = getPosition();
-        int speed = 2;
+        int speed = 1;
         if (isJumping == 0) return;
         if (isJumping == 1) {
             int newY = startingP.getY() - jumpHeight;
@@ -109,5 +109,11 @@ public class Hero extends Element {
     }
     public boolean isHeroFrozen() {
         return isFrozen;
+    }
+    public int getIsJumping(){
+        return isJumping;
+    }
+    public long getJumpStart(){
+        return jumpStart;
     }
 }

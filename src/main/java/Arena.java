@@ -186,7 +186,6 @@ public class Arena {
         }
         return singleFloor;
     }
-
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#13022D")); //Dark Purple
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
@@ -225,7 +224,6 @@ public class Arena {
         }
         hero.draw(graphics);
     }
-
     public void checkHeroCollisions() {
         if (checkMonsterCollision(hero.getPosition())) {
             hero.setHp(-20);
@@ -233,9 +231,8 @@ public class Arena {
         if (checkCoinCollision(hero.getPosition())) {
             score++;
         }
-        if (checkKeyCollision(hero)) {
-            System.out.println("GOT A KEY");
-        }
+        checkKeyCollision(hero);
+
         if (checkBulletCollision(hero)) {
             hero.setHp(-10);
             hero.freeze();
