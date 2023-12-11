@@ -23,7 +23,7 @@ public class Arena {
     private List<Integer> shootingMonsterspLevel = Arrays.asList(1, 1, 1, 2);
     private List<Integer> speedMonsterspLevel =  Arrays.asList(0, 0, 1, 2);
     private List<Integer> yLevels = Arrays.asList(24, 20, 16, 12);
-    private List<Monster> monsters = createMonsters();
+    List<Monster> monsters = createMonsters();
     protected List<Key> keys = createKeys();
     private int elevatorKeysCount = 0;
     private List<Elevator> elevators = createElevators();

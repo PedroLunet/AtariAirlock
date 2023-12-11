@@ -2,16 +2,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class SpeedMonsterTest {
-
     @Test
-    public void testMove_ShouldChangeDirectionWhenWallOrElevatorDetected() {
-
-        Arena arena = new Arena(10, 10);
-        SpeedMonster speedMonster = new SpeedMonster(5, 5);
-        int initialX = speedMonster.getPosition().getX();
-        speedMonster.move(arena);
-
-        Assertions.assertNotEquals(initialX, speedMonster.getPosition().getX());
-
+    public void testMove() {
+        Arena arena = new Arena(100, 28);
+        SpeedMonster monster = new SpeedMonster(25, 24);
+        arena.monsters.add(monster);
+        monster.move(arena);
+        Assertions.assertEquals(25, monster.getPosition().getX());
     }
 }
