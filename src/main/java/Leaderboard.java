@@ -14,6 +14,10 @@ public class Leaderboard {
         players.add(player);
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public void showLeaderboard() {
         sortPlayers(); // Ordenar os jogadores por pontuação
 
@@ -24,7 +28,7 @@ public class Leaderboard {
         }
     }
 
-    private void sortPlayers() {
+    void sortPlayers() {
         players.sort(Comparator.comparingInt(Player::getScore).reversed());
     }
 }

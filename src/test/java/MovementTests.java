@@ -32,6 +32,15 @@ public class MovementTests {
         assertEquals(79, hero.getPosition().getX());
         assertEquals(24, hero.getPosition().getY());
     }
+
+    @Test
+    public void testHeroJumpHeight() {
+        arena.processKey(new KeyStroke(KeyType.ArrowUp));
+        hero.moveHero(arena,System.currentTimeMillis());
+        if(hero.getIsJumping()==2){
+            assertEquals(23, hero.getPosition().getY());
+        }
+    }
     @Test
     public void testHeroJump(){
         arena.processKey(new KeyStroke(KeyType.ArrowUp));
