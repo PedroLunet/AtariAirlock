@@ -47,21 +47,22 @@ After implementing these changes:
 After the intermidiate delivery , we were faced with some more problems as we aspired to add complexity to the game : How could we represent various types of monsters and how could we make a running elevator
 
 **The Pattern**
-Our sou
-
-
-
+Our solution to this was to use the "Command" design pattern where we call an "activation" function in the arena class to perform the elevator methods. As for the monster types we created an abstract class called 'Monster' with an action function that we Override to each new monster type .
 
 **IMPLEMENTATION**
 ![umlldts](https://github.com/FEUP-LDTS-2023/project-l11gr03/assets/142496110/db4e2837-a795-450b-942b-597860b785c7)
 
 #### KNOWN CODE SMELLS
 
-No major code smells detected .
+We did not ran error prone.
 
 ### TEST COVERAGE
 
 <img width="461" alt="Screenshot 2023-12-23 at 23 15 44" src="https://github.com/FEUP-LDTS-2023/project-l11gr03/assets/142496110/520c5be3-25e7-43a5-9a4a-10dd0b150d34">
+
+###PIT TEST###
+
+We couldn't run the PITest for our project.
 
 ### SELF-EVALUATION
 
