@@ -7,21 +7,24 @@ This project was developed by Pedro Lunet (up202207150@up.pt), António Cunha (2
 
 ### IMPLEMENTED FEATURES
 
-- **Walking** - The game character will move left and right when the respective arrow keys are pressed.
-- **Jumping** - The game character will jump when the arrow up key is pressed.
+- **Mouse and Keyboard Movement** - The game character will move left and right and also jump when the respective arrow keys are pressed.
 - **Getting coins** - When the game character goes over a coin, he collects it and his score is increased.
-- **Getting keys** - Keys are waiting to be caught on each floor. The character needs to catch them, by going over them (just like the coins), to unlock the elevator to the next floor.
-- **Collisions** - The game character dies when he touches monsters.
+- **Getting keys** - Keys are waiting to be caught on each floor/level . The character needs to catch them, by going over them (just like the coins), to unlock the elevator to the next floor.
+- **Multiple Levels** - As the hero progresses through each elevator , 4 levels with coins and new monsters awaits him .
+- **Various Monster Types** - Monsters appear in each level , some capable of shooting bullets at the hero , others racing to get him .
+- **Flooded Levels** - The player will have to get through each level quick enough to not get sunk with the submarine.
+- **Collisions** - The game character suffers various consequences when it collides with bullets , monsters or the water that is sinking the submarine.
 
-### PLANNED FEATURES
 
-- **Different Monsters** - Implement different monsters, that should have different attack strategies.
+## Planned Features
+
+All the planned features were successfully implemented.
 
 ### DESIGN
 
 #### DRAWING THE SUBMARINE
 
-**Problem in Context**
+**Pre Intermidiate Delivery Problems**
 
 When first designing the submarine structure, we were faced with 2 problems: what characters to use and, if using more than one character, how would we do that?
 
@@ -29,11 +32,7 @@ When first designing the submarine structure, we were faced with 2 problems: wha
 
 The first solution was to have 2 different draw methods in the Arena class and do all the operations in it. However, when trying to implement new features like collisions, we found out it wasn't a great idea. The final solution was to restructure the way we were building the submarine and implement 2 new classes: Floor and Wall. this allowed us to build the submarine in a more controlled way, having separate methods and classes for walls and floors.
 
-**Implementation**
-
-
 **Consequences**
-
 After implementing these changes:
 
 - It is now easier to code the collisions between the main character and the walls, floors and monsters.
@@ -41,17 +40,28 @@ After implementing these changes:
 - The Arena class looks cleaner since the draw methods were moved to the respective classes.
 - There are now 2 more classes to manage.
 
-![diagram](https://github.com/FEUP-LDTS-2023/project-l11gr03/assets/118676706/49ec7532-834b-42e1-8502-fdbf0d70dbb2)
 
-------
+
+**Post Intermidiate Delivery Problems**
+
+After the intermidiate delivery , we were faced with some more problems as we aspired to add complexity to the game : How could we represent various types of monsters and how could we make a running elevator
+
+**The Pattern**
+Our sou
+
+
+
+
+**IMPLEMENTATION**
+![umlldts](https://github.com/FEUP-LDTS-2023/project-l11gr03/assets/142496110/db4e2837-a795-450b-942b-597860b785c7)
 
 #### KNOWN CODE SMELLS
 
-> This section should describe 3 to 5 different code smells that you have identified in your current implementation.
+No major code smells detected .
 
-### TESTING
+### TEST COVERAGE
 
-![image](https://github.com/FEUP-LDTS-2023/project-l11gr03/assets/118676706/9350540c-6ea6-40a2-ade0-1fab8410a5b6)
+<img width="461" alt="Screenshot 2023-12-23 at 23 15 44" src="https://github.com/FEUP-LDTS-2023/project-l11gr03/assets/142496110/520c5be3-25e7-43a5-9a4a-10dd0b150d34">
 
 ### SELF-EVALUATION
 
